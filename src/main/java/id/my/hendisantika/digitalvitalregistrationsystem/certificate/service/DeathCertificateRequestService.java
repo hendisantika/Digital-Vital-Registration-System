@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Created by IntelliJ IDEA.
@@ -112,5 +113,11 @@ public class DeathCertificateRequestService {
 
     public Long countDeathCertificateRequest() {
         return deathCertificateRepository.count();
+    }
+
+    public Map<String, Long> countDeathByMonth() {
+        return deathCertificateRepository.findAll()
+                .stream()
+                .collect(Collectors.groupingBy(req -> req.getRequestedAt().getMonth().name(), Collectors.counting()));
     }
 }
