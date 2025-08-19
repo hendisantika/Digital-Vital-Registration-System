@@ -1,11 +1,15 @@
 package id.my.hendisantika.digitalvitalregistrationsystem.certificate.controller;
 
+import id.my.hendisantika.digitalvitalregistrationsystem.certificate.certificateFile.CertificateFile;
 import id.my.hendisantika.digitalvitalregistrationsystem.certificate.model.DeathCertificateRequest;
 import id.my.hendisantika.digitalvitalregistrationsystem.certificate.repository.CertificateFileRepository;
 import id.my.hendisantika.digitalvitalregistrationsystem.certificate.service.DeathCertificateRequestService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,5 +38,15 @@ public class DeathCertificateController {
             @RequestBody DeathCertificateRequest request) {
         DeathCertificateRequest savedRequest = deathCertificateRequestService.saveDeathCertificateRequest(request);
         return new ResponseEntity<>(savedRequest, HttpStatus.CREATED);
+    }
+
+    @PostMapping("/death/{id}/generate")
+    public ResponseEntity<byte[]> generateDeathCertificate(@PathVariable long id) {
+        CertificateFile file = certificateFileRepository.findByDeathCertificateRequestId(id)
+                .orElseGet(() -> deathCertificateRequestService.generateDeathCertificateFile(id));
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION)
+                .contentType(MediaType.APPLICATION_PDF)
+                .body(file.getFileData());
     }
 }
