@@ -1,4 +1,4 @@
-package id.my.hendisantika.digitalvitalregistrationsystem.certificate;
+package id.my.hendisantika.digitalvitalregistrationsystem.certificate.certificateFile;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;

@@ -2,7 +2,7 @@ package id.my.hendisantika.digitalvitalregistrationsystem.certificate.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import id.my.hendisantika.digitalvitalregistrationsystem.certificate.CertificateFile;
+import id.my.hendisantika.digitalvitalregistrationsystem.certificate.certificateFile.CertificateFile;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
