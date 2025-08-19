@@ -133,4 +133,8 @@ public class BirthCertificateService {
         return birthCertificateRepository.findAll()
                 .stream().filter(cert -> cert.getStatus() == CertificateStatus.PENDING).count();
     }
+
+    public Long countApprovedRequest() {
+        return certificateFileRepository.count();
+    }
 }
