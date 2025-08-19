@@ -84,4 +84,12 @@ public class DeathCertificateRequestService {
     public List<DeathCertificateRequest> getAllRequestsByCitizenId(Long id) {
         return deathCertificateRepository.findByRequestedById(id);
     }
+
+    public void approveDeathCertificateRequest(Long id) {
+        deathCertificateRepository.findById(id)
+                .ifPresent(deathCertificate -> {
+                    deathCertificate.setCertificateStatus(CertificateStatus.APPROVED);
+                    deathCertificateRepository.save(deathCertificate);
+                });
+    }
 }
