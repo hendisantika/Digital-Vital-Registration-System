@@ -58,4 +58,10 @@ public class DeathCertificateController {
         List<DeathCertificateRequest> list = deathCertificateRequestService.getAllRequests();
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
+
+    @GetMapping("{id}/list")
+    public ResponseEntity<List<DeathCertificateRequest>> getAllDeathCertificateRequests(@PathVariable long id) {
+        List<DeathCertificateRequest> list = deathCertificateRequestService.getAllRequestsByCitizenId(id);
+        return new ResponseEntity<>(list, HttpStatus.OK);
+    }
 }
