@@ -116,4 +116,8 @@ public class BirthCertificateService {
 
         return file;
     }
+
+    public Long countBirthCertificateRequests() {
+        return birthCertificateRepository.count();
+    }
 }
