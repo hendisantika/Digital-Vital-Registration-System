@@ -109,4 +109,8 @@ public class DeathCertificateRequestService {
                     deathCertificateRepository.save(deathCertificate);
                 });
     }
+
+    public Long countDeathCertificateRequest() {
+        return deathCertificateRepository.count();
+    }
 }
