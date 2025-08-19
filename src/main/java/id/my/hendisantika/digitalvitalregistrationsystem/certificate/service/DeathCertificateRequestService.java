@@ -100,6 +100,13 @@ public class DeathCertificateRequestService {
                     deathCertificate.setCertificateStatus(CertificateStatus.APPROVED_BY_VERIFIER);
                     deathCertificateRepository.save(deathCertificate);
                 });
+    }
 
+    public void rejectDeathCertificateRequest(Long id) {
+        deathCertificateRepository.findById(id)
+                .ifPresent(deathCertificate -> {
+                    deathCertificate.setCertificateStatus(CertificateStatus.REJECTED);
+                    deathCertificateRepository.save(deathCertificate);
+                });
     }
 }
