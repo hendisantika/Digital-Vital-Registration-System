@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 /**
  * Created by IntelliJ IDEA.
  * Project : Digital-Vital-Registration-System
@@ -103,4 +105,8 @@ public class BirthCertificateController {
         return ResponseEntity.ok(birthCertificateService.getAllRequests());
     }
 
+    @GetMapping("/citizen/{citizenId}")
+    public ResponseEntity<List<BirthCertificateRequest>> getRequestsByCitizenId(@PathVariable Long citizenId) {
+        return ResponseEntity.ok(birthCertificateService.getRequestByCitizenId(citizenId));
+    }
 }
