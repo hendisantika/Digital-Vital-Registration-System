@@ -90,4 +90,10 @@ public class DeathCertificateController {
     public ResponseEntity<Optional<List<DeathCertificateRequest>>> getDeathCertificateRequestsByMunicipality(@RequestParam String municipality) {
         return ResponseEntity.ok().body(deathCertificateRequestService.getDeathCertificateRequestByMunicipality(municipality));
     }
+
+    @PatchMapping("{id}/verify")
+    public ResponseEntity<Map<String, String>> verifyDeathCertificate(@PathVariable long id) {
+        deathCertificateRequestService.approveByVerifier(id);
+        return ResponseEntity.ok(Map.of("status", "verified"));
+    }
 }
