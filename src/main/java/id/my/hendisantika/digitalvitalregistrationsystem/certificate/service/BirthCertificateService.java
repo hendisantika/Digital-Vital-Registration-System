@@ -14,6 +14,8 @@ import org.springframework.web.server.ResponseStatusException;
 import javax.management.Notification;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by IntelliJ IDEA.
@@ -79,5 +81,39 @@ public class BirthCertificateService {
 
     public CertificateFile getCertificateByReferenceNumber(String referenceNumber) {
         return certificateFileRepository.findByReferenceNumber(referenceNumber);
+    }
+
+    public CertificateFile generateBirthCertificateReport(Long id) {
+        BirthCertificateRequest cert = birthCertificateRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Certificate not found"));
+
+        Citizen citizen = cert.getCitizen();
+
+        Map<String, Object> params = new HashMap<>();
+        params.put("childName", cert.getChildName());
+        params.put("gender", cert.getGender());
+        params.put("dateOfBirth", cert.getDateOfBirth());
+        params.put("birthPlace", citizen.getMunicipality());
+        params.put("firstName", citizen.getFirstName());
+        params.put("middleName", citizen.getMiddleName());
+        params.put("lastName", citizen.getLastName());
+        params.put("spouseName", citizen.getSpouseName());
+        params.put("district", citizen.getDistrict());
+        params.put("municipality", citizen.getMunicipality());
+        params.put("wardNo", citizen.getWardNo());
+        params.put("tole", citizen.getTole());
+        params.put("nationality", citizen.getNationality());
+        params.put("verifiedBy", "Ward Secretary");
+        params.put("verifiedAt", citizen.getMunicipality());
+        params.put("issuedDate", LocalDate.now());
+
+        CertificateFile file = birthCertificateReportService.generateBirthCertificateReport(params, citizen, cert);
+
+        cert.setCertificateFile(file);
+        birthCertificateRepository.save(cert); // must save this relation
+
+        params.put("referenceNumber", file.getReferenceNumber());
+
+        return file;
     }
 }
