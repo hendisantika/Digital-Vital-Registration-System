@@ -85,4 +85,9 @@ public class BirthCertificateController {
     public ResponseEntity<Long> countApprovedRequest() {
         return ResponseEntity.ok(birthCertificateService.countApprovedRequest());
     }
+
+    @GetMapping("/rejected-count")
+    public ResponseEntity<Long> countRejectedRequest() {
+        return ResponseEntity.ok(birthCertificateService.countRejectedRequest());
+    }
 }
