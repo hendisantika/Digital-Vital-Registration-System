@@ -1,5 +1,6 @@
 package id.my.hendisantika.digitalvitalregistrationsystem.certificate.service;
 
+import id.my.hendisantika.digitalvitalregistrationsystem.certificate.certificateFile.CertificateFile;
 import id.my.hendisantika.digitalvitalregistrationsystem.certificate.enums.CertificateStatus;
 import id.my.hendisantika.digitalvitalregistrationsystem.certificate.model.DeathCertificateRequest;
 import id.my.hendisantika.digitalvitalregistrationsystem.certificate.repository.DeathCertificateRepository;
@@ -8,7 +9,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by IntelliJ IDEA.
@@ -41,7 +45,34 @@ public class DeathCertificateRequestService {
         deathCertificateRequest.setCertificateStatus(CertificateStatus.PENDING);
         deathCertificateRequest.setRequestedAt(LocalDateTime.now());
 
-
         return deathCertificateRepository.save(deathCertificateRequest);
+    }
+
+    public CertificateFile generateDeathCertificateFile(Long id) {
+        DeathCertificateRequest request = deathCertificateRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Death certificate not found"));
+        Citizen citizen = request.getRequestedBy();
+
+        int ageAtDeath = request.getDeceasedDate().getYear() - request.getDateOfBirth().getYear();
+        Map<String, Object> parameters = new HashMap<>();
+        parameters.put("fullName", request.getDeceasedName());
+        parameters.put("dateOfBirth", request.getDateOfBirth());
+        parameters.put("dateOfDeath", request.getDeceasedDate());
+        parameters.put("ageAtDeath", ageAtDeath);
+        parameters.put("requestedBy", citizen.getFirstName() + " " + citizen.getMiddleName() + " " + citizen.getLastName());
+        parameters.put("relation", request.getRelation().name());
+        parameters.put("fatherName", request.getFatherName());
+        parameters.put("motherName", request.getMotherName());
+        parameters.put("gender", request.getGender().name());
+        parameters.put("verifiedBy", "Ram Kumar");
+        parameters.put("verifiedAt", LocalDateTime.now().toString());
+        parameters.put("issuedDate", LocalDate.now());
+
+        CertificateFile file = deathCertificateReportService.generateDeathCertificateReport(parameters, citizen, request);
+
+        request.setCertificateFile(file);
+
+        parameters.put("referenceNumber", file.getReferenceNumber());
+        return file;
     }
 }
