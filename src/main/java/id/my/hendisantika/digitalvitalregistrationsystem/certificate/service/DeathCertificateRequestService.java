@@ -81,4 +81,7 @@ public class DeathCertificateRequestService {
         return deathCertificateRepository.findAll();
     }
 
+    public List<DeathCertificateRequest> getAllRequestsByCitizenId(Long id) {
+        return deathCertificateRepository.findByRequestedById(id);
+    }
 }
