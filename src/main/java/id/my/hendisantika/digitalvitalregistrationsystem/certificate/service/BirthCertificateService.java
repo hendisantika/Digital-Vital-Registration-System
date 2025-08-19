@@ -15,6 +15,7 @@ import javax.management.Notification;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -136,5 +137,9 @@ public class BirthCertificateService {
 
     public Long countApprovedRequest() {
         return certificateFileRepository.count();
+    }
+
+    public List<BirthCertificateRequest> getAllRequests() {
+        return birthCertificateRepository.findAll().stream().toList();
     }
 }
