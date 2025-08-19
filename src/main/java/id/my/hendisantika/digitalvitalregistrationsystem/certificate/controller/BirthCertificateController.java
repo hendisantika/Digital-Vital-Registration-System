@@ -70,4 +70,9 @@ public class BirthCertificateController {
                 .contentType(MediaType.APPLICATION_PDF)
                 .body(pdf);
     }
+
+    @GetMapping("/count")
+    public ResponseEntity<Long> countBirthCertificateRequests() {
+        return ResponseEntity.ok(birthCertificateService.countBirthCertificateRequests());
+    }
 }
