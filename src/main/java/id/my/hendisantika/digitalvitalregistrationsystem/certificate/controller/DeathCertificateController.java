@@ -15,10 +15,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * Created by IntelliJ IDEA.
@@ -82,5 +84,10 @@ public class DeathCertificateController {
     @GetMapping("/count-death")
     public ResponseEntity<Long> countDeathCertificateRequests() {
         return ResponseEntity.ok().body(deathCertificateRequestService.countDeathCertificateRequest());
+    }
+
+    @GetMapping("/by-municipality")
+    public ResponseEntity<Optional<List<DeathCertificateRequest>>> getDeathCertificateRequestsByMunicipality(@RequestParam String municipality) {
+        return ResponseEntity.ok().body(deathCertificateRequestService.getDeathCertificateRequestByMunicipality(municipality));
     }
 }
