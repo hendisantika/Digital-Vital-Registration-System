@@ -1,9 +1,13 @@
 package id.my.hendisantika.digitalvitalregistrationsystem.certificate.controller;
 
+import id.my.hendisantika.digitalvitalregistrationsystem.certificate.model.BirthCertificateRequest;
 import id.my.hendisantika.digitalvitalregistrationsystem.certificate.repository.CertificateFileRepository;
 import id.my.hendisantika.digitalvitalregistrationsystem.certificate.service.BirthCertificateReportService;
 import id.my.hendisantika.digitalvitalregistrationsystem.certificate.service.BirthCertificateService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -26,4 +30,9 @@ public class BirthCertificateController {
     private final BirthCertificateReportService birthCertificateReportService;
     private final CertificateFileRepository certificateFileRepository;
 
+    @PostMapping("/save")
+    public ResponseEntity<BirthCertificateRequest> saveCertificate(@RequestBody BirthCertificateRequest birthCertificate) {
+        BirthCertificateRequest savedCertificate = birthCertificateService.saveCertificate(birthCertificate);
+        return ResponseEntity.ok(savedCertificate);
+    }
 }
