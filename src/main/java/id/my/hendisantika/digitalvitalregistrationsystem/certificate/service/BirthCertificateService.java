@@ -1,5 +1,6 @@
 package id.my.hendisantika.digitalvitalregistrationsystem.certificate.service;
 
+import id.my.hendisantika.digitalvitalregistrationsystem.certificate.certificateFile.CertificateFile;
 import id.my.hendisantika.digitalvitalregistrationsystem.certificate.enums.CertificateStatus;
 import id.my.hendisantika.digitalvitalregistrationsystem.certificate.model.BirthCertificateRequest;
 import id.my.hendisantika.digitalvitalregistrationsystem.certificate.repository.BirthCertificateRepository;
@@ -74,5 +75,9 @@ public class BirthCertificateService {
 
         notificationService.sendAndDispatch(notification.build());
         return savedRequest;
+    }
+
+    public CertificateFile getCertificateByReferenceNumber(String referenceNumber) {
+        return certificateFileRepository.findByReferenceNumber(referenceNumber);
     }
 }
