@@ -75,4 +75,10 @@ public class BirthCertificateController {
     public ResponseEntity<Long> countBirthCertificateRequests() {
         return ResponseEntity.ok(birthCertificateService.countBirthCertificateRequests());
     }
+
+    @GetMapping("/pending-count")
+    public ResponseEntity<Long> countPendingRequest() {
+        return ResponseEntity.ok(birthCertificateService.countPendingRequest());
+    }
+
 }
