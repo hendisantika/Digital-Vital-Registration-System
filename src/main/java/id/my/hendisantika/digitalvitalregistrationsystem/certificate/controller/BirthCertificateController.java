@@ -97,4 +97,10 @@ public class BirthCertificateController {
         birthCertificateService.deleteBirthCertificateRequestById(id);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/list")
+    public ResponseEntity<Iterable<BirthCertificateRequest>> getAllRequests() {
+        return ResponseEntity.ok(birthCertificateService.getAllRequests());
+    }
+
 }
