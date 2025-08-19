@@ -205,6 +205,9 @@ public class BirthCertificateService {
     public BirthCertificateRequest getRequestById(Long id) {
         return birthCertificateRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Certificate not found with ID: " + id));
+    }
 
+    public Long countBirthCertificateRequest() {
+        return birthCertificateRepository.count();
     }
 }
