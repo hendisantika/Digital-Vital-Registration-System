@@ -142,4 +142,11 @@ public class BirthCertificateService {
     public List<BirthCertificateRequest> getAllRequests() {
         return birthCertificateRepository.findAll().stream().toList();
     }
+
+    public Long countRejectedRequest() {
+        return birthCertificateRepository.findAll()
+                .stream()
+                .filter(cert -> cert.getStatus() == CertificateStatus.REJECTED)
+                .count();
+    }
 }
