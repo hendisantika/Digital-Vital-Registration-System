@@ -78,4 +78,9 @@ public class DeathCertificateController {
         deathCertificateRequestService.rejectDeathCertificateRequest(id);
         return ResponseEntity.ok(Map.of("status", "rejected"));
     }
+
+    @GetMapping("/count-death")
+    public ResponseEntity<Long> countDeathCertificateRequests() {
+        return ResponseEntity.ok().body(deathCertificateRequestService.countDeathCertificateRequest());
+    }
 }
