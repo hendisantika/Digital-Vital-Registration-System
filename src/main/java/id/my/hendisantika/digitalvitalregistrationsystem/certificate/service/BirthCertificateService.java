@@ -217,4 +217,8 @@ public class BirthCertificateService {
                 .stream()
                 .collect(Collectors.groupingBy(request -> request.getRequestedAt().getMonth().name(), Collectors.counting()));
     }
+
+    public List<BirthCertificateRequest> getByStaffMunicipality(String municipality) {
+        return birthCertificateRepository.findByMunicipality(municipality);
+    }
 }
