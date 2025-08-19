@@ -74,4 +74,8 @@ public class BirthCertificateReportService {
             throw new RuntimeException("Error generating report", e);
         }
     }
+
+    public Long countGeneratedBirthCertificate() {
+        return certificateFileRepository.count();
+    }
 }
