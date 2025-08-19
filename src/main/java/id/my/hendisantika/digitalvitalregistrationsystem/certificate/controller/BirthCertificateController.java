@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by IntelliJ IDEA.
@@ -108,5 +109,11 @@ public class BirthCertificateController {
     @GetMapping("/citizen/{citizenId}")
     public ResponseEntity<List<BirthCertificateRequest>> getRequestsByCitizenId(@PathVariable Long citizenId) {
         return ResponseEntity.ok(birthCertificateService.getRequestByCitizenId(citizenId));
+    }
+
+    @PostMapping("/approve/{id}")
+    public ResponseEntity<Map<String, String>> approveBirthCertificate(@PathVariable Long id) {
+        birthCertificateService.approveBirthCertificateRequest(id);
+        return ResponseEntity.ok(Map.of("message", "Approved"));
     }
 }
