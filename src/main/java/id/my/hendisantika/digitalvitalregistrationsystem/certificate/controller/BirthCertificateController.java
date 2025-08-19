@@ -116,4 +116,10 @@ public class BirthCertificateController {
         birthCertificateService.approveBirthCertificateRequest(id);
         return ResponseEntity.ok(Map.of("message", "Approved"));
     }
+
+    @PostMapping("/reject/{id}")
+    public ResponseEntity<Map<String, String>> rejectBirthCertificate(@PathVariable Long id) {
+        birthCertificateService.rejectBirthCertificateRequest(id);
+        return ResponseEntity.ok(Map.of("message", "Rejected"));
+    }
 }
