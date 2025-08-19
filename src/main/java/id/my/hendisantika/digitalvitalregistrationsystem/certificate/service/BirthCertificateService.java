@@ -187,4 +187,12 @@ public class BirthCertificateService {
             notificationService.sendAndDispatch(notification);
         });
     }
+
+    public void approveByVerifier(Long id) {
+        birthCertificateRepository.findById(id).ifPresent(birthCertificate -> {
+            birthCertificate.setStatus(CertificateStatus.APPROVED_BY_VERIFIER);
+            birthCertificateRepository.save(birthCertificate);
+        });
+    }
+
 }
