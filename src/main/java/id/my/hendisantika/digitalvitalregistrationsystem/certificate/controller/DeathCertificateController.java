@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by IntelliJ IDEA.
@@ -63,5 +65,11 @@ public class DeathCertificateController {
     public ResponseEntity<List<DeathCertificateRequest>> getAllDeathCertificateRequests(@PathVariable long id) {
         List<DeathCertificateRequest> list = deathCertificateRequestService.getAllRequestsByCitizenId(id);
         return new ResponseEntity<>(list, HttpStatus.OK);
+    }
+
+    @PatchMapping("{id}/approve")
+    public ResponseEntity<Map<String, String>> approveDeathCertificate(@PathVariable long id) {
+        deathCertificateRequestService.approveDeathCertificateRequest(id);
+        return ResponseEntity.ok(Map.of("status", "approved"));
     }
 }
