@@ -153,4 +153,38 @@ public class BirthCertificateService {
     public List<BirthCertificateRequest> getRequestByCitizenId(Long id) {
         return birthCertificateRepository.findByCitizenId(id);
     }
+
+    public void approveBirthCertificateRequest(Long id) {
+        birthCertificateRepository.findById(id).ifPresent(birthCertificate -> {
+            birthCertificate.setStatus(CertificateStatus.APPROVED);
+            BirthCertificateRequest savedRequest = birthCertificateRepository.save(birthCertificate);
+            Citizen citizen = savedRequest.getCitizen();
+
+            CertificateFile file = certificateFileRepository.findByBirthCertificateRequestId(id)
+                    .orElseGet(() -> generateBirthCertificateReport(id));
+
+            //File certificatePdf = new File(file.getFilePath());
+            // log.warn("file Path {}", certificatePdf);// assume you store absolute path
+            String to = savedRequest.getCitizen().getUserEmail();
+            //String subject = "Municipality Notification - Birth Certificate Approved";
+            String message = "Dear " + citizen.getFirstName() + ",\n\nYour birth certificate has been approved and is attached to this email.\n\nRegards,\nSmart Municipality";
+
+            // emailService.sendEmailWithAttachment(to, subject, message, certificatePdf);
+
+            // Optionally still log/send notification via Kafka
+            Notification notification = Notification.builder()
+                    .event(NotificationEvent.REVIEWING)
+                    .channel(DeliveryChannel.BOTH)
+                    .type(NotificationType.EMAIL)
+                    .email(to)
+                    .citizen(citizen)
+                    .message(message)
+                    .createdAt(LocalDateTime.now())
+                    .certificate(file)
+                    .certificateId(file.getId())
+                    .build();
+
+            notificationService.sendAndDispatch(notification);
+        });
+    }
 }
