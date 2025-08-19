@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -119,5 +120,9 @@ public class DeathCertificateRequestService {
         return deathCertificateRepository.findAll()
                 .stream()
                 .collect(Collectors.groupingBy(req -> req.getRequestedAt().getMonth().name(), Collectors.counting()));
+    }
+
+    public Optional<List<DeathCertificateRequest>> getDeathCertificateRequestByMunicipality(String municipality) {
+        return deathCertificateRepository.findByMunicipality(municipality);
     }
 }
