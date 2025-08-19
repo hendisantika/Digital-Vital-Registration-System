@@ -122,4 +122,17 @@ public class BirthCertificateController {
         birthCertificateService.rejectBirthCertificateRequest(id);
         return ResponseEntity.ok(Map.of("message", "Rejected"));
     }
+
+    @GetMapping("/by-id/{id}")
+    public ResponseEntity<BirthCertificateRequest> getBirthCertificateById(@PathVariable Long id) {
+        BirthCertificateRequest req = birthCertificateService.getRequestById(id);
+        return ResponseEntity.ok(req);
+    }
+
+
+//    @GetMapping("/count-birth")
+//    public ResponseEntity<Long> countBirthCertificate(){
+//        return new ResponseEntity<>(birthCertificateReportService.countGeneratedBirthCertificate(), HttpStatus.OK);
+//    }
+
 }
