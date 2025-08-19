@@ -140,4 +140,9 @@ public ResponseEntity<List<BirthCertificateRequest>> getBirthCertificateByMunici
     return ResponseEntity.ok().body(birthCertificateService.getByStaffMunicipality(municipality));
 }
 
+    @PostMapping("/verify/{id}")
+    public ResponseEntity<Map<String, String>> verifyBirthCertificate(@PathVariable Long id) {
+        birthCertificateService.approveByVerifier(id);
+        return ResponseEntity.ok(Map.of("message", "Approved"));
+    }
 }
