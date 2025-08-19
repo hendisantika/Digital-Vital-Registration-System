@@ -7,6 +7,7 @@ import id.my.hendisantika.digitalvitalregistrationsystem.certificate.service.Bir
 import id.my.hendisantika.digitalvitalregistrationsystem.certificate.service.BirthCertificateService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -50,5 +51,23 @@ public class BirthCertificateController {
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + file.getFilePath())
                 .contentType(MediaType.APPLICATION_PDF)
                 .body(file.getFileData());
+    }
+
+    @GetMapping("/download/{referenceNumber}")
+    public ResponseEntity<?> downloadCertificateByReferenceNumber(@PathVariable String referenceNumber) {
+        if (referenceNumber == null || referenceNumber.trim().isEmpty()) {
+            return ResponseEntity.badRequest().body("Reference number must not be empty.");
+        }
+
+        CertificateFile certificateFile = certificateFileRepository.findByReferenceNumber(referenceNumber);
+        if (certificateFile == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Certificate not found for the given reference number.");
+        }
+
+        byte[] pdf = certificateFile.getFileData();
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + certificateFile.getFilePath())
+                .contentType(MediaType.APPLICATION_PDF)
+                .body(pdf);
     }
 }
