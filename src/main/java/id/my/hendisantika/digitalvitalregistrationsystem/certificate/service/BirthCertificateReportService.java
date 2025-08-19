@@ -78,4 +78,12 @@ public class BirthCertificateReportService {
     public Long countGeneratedBirthCertificate() {
         return certificateFileRepository.count();
     }
+
+    public void deleteCertificateFileById(Long id) {
+        if (!certificateFileRepository.existsById(id)) {
+            throw new RuntimeException("Certificate not found with ID: " + id);
+
+        }
+        certificateFileRepository.deleteById(id);
+    }
 }
