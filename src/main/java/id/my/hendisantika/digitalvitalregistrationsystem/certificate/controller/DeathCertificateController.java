@@ -9,11 +9,14 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 /**
  * Created by IntelliJ IDEA.
@@ -48,5 +51,11 @@ public class DeathCertificateController {
                 .header(HttpHeaders.CONTENT_DISPOSITION)
                 .contentType(MediaType.APPLICATION_PDF)
                 .body(file.getFileData());
+    }
+
+    @GetMapping("/list")
+    public ResponseEntity<List<DeathCertificateRequest>> getAllDeathCertificateRequests() {
+        List<DeathCertificateRequest> list = deathCertificateRequestService.getAllRequests();
+        return new ResponseEntity<>(list, HttpStatus.OK);
     }
 }
