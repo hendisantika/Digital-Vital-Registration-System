@@ -149,4 +149,8 @@ public class BirthCertificateService {
                 .filter(cert -> cert.getStatus() == CertificateStatus.REJECTED)
                 .count();
     }
+
+    public List<BirthCertificateRequest> getRequestByCitizenId(Long id) {
+        return birthCertificateRepository.findByCitizenId(id);
+    }
 }
