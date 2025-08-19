@@ -195,4 +195,10 @@ public class BirthCertificateService {
         });
     }
 
+    public void rejectBirthCertificateRequest(Long id) {
+        birthCertificateRepository.findById(id).ifPresent(birthCertificate -> {
+            birthCertificate.setStatus(CertificateStatus.REJECTED);
+            birthCertificateRepository.save(birthCertificate);
+        });
+    }
 }
