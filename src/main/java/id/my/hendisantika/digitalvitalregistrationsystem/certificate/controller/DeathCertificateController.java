@@ -72,4 +72,10 @@ public class DeathCertificateController {
         deathCertificateRequestService.approveDeathCertificateRequest(id);
         return ResponseEntity.ok(Map.of("status", "approved"));
     }
+
+    @PatchMapping("{id}/reject")
+    public ResponseEntity<Map<String, String>> updateDeathCertificateRequest(@PathVariable long id) {
+        deathCertificateRequestService.rejectDeathCertificateRequest(id);
+        return ResponseEntity.ok(Map.of("status", "rejected"));
+    }
 }
