@@ -128,4 +128,9 @@ public class BirthCertificateService {
         }
         birthCertificateRepository.deleteById(id);
     }
+
+    public Long countPendingRequest() {
+        return birthCertificateRepository.findAll()
+                .stream().filter(cert -> cert.getStatus() == CertificateStatus.PENDING).count();
+    }
 }
