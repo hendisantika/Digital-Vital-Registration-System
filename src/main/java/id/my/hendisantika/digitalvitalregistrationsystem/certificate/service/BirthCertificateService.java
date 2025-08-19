@@ -201,4 +201,10 @@ public class BirthCertificateService {
             birthCertificateRepository.save(birthCertificate);
         });
     }
+
+    public BirthCertificateRequest getRequestById(Long id) {
+        return birthCertificateRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Certificate not found with ID: " + id));
+
+    }
 }
