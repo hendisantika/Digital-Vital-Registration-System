@@ -1,11 +1,16 @@
 package id.my.hendisantika.digitalvitalregistrationsystem.certificate.controller;
 
+import id.my.hendisantika.digitalvitalregistrationsystem.certificate.certificateFile.CertificateFile;
 import id.my.hendisantika.digitalvitalregistrationsystem.certificate.model.BirthCertificateRequest;
 import id.my.hendisantika.digitalvitalregistrationsystem.certificate.repository.CertificateFileRepository;
 import id.my.hendisantika.digitalvitalregistrationsystem.certificate.service.BirthCertificateReportService;
 import id.my.hendisantika.digitalvitalregistrationsystem.certificate.service.BirthCertificateService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,5 +39,16 @@ public class BirthCertificateController {
     public ResponseEntity<BirthCertificateRequest> saveCertificate(@RequestBody BirthCertificateRequest birthCertificate) {
         BirthCertificateRequest savedCertificate = birthCertificateService.saveCertificate(birthCertificate);
         return ResponseEntity.ok(savedCertificate);
+    }
+
+    @GetMapping("/birth/{id}/generate")
+    public ResponseEntity<byte[]> downloadCertificate(@PathVariable Long id) {
+        CertificateFile file = certificateFileRepository.findByBirthCertificateRequestId(id)
+                .orElseGet(() -> birthCertificateService.generateBirthCertificateReport(id));
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + file.getFilePath())
+                .contentType(MediaType.APPLICATION_PDF)
+                .body(file.getFileData());
     }
 }
