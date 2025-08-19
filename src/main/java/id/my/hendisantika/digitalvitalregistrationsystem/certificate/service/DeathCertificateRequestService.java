@@ -92,4 +92,14 @@ public class DeathCertificateRequestService {
                     deathCertificateRepository.save(deathCertificate);
                 });
     }
+
+    public void approveByVerifier(Long id) {
+        deathCertificateRepository.findById(id)
+                .ifPresent(deathCertificate
+                        -> {
+                    deathCertificate.setCertificateStatus(CertificateStatus.APPROVED_BY_VERIFIER);
+                    deathCertificateRepository.save(deathCertificate);
+                });
+
+    }
 }
