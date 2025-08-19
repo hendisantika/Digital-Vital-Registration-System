@@ -120,4 +120,12 @@ public class BirthCertificateService {
     public Long countBirthCertificateRequests() {
         return birthCertificateRepository.count();
     }
+
+    public void deleteBirthCertificateRequestById(Long id) {
+        if (!birthCertificateRepository.existsById(id)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Certificate not found with ID: " + id);
+
+        }
+        birthCertificateRepository.deleteById(id);
+    }
 }
