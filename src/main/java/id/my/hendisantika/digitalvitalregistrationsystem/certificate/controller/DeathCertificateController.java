@@ -1,8 +1,13 @@
 package id.my.hendisantika.digitalvitalregistrationsystem.certificate.controller;
 
+import id.my.hendisantika.digitalvitalregistrationsystem.certificate.model.DeathCertificateRequest;
 import id.my.hendisantika.digitalvitalregistrationsystem.certificate.repository.CertificateFileRepository;
 import id.my.hendisantika.digitalvitalregistrationsystem.certificate.service.DeathCertificateRequestService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -24,4 +29,10 @@ public class DeathCertificateController {
     private final DeathCertificateRequestService deathCertificateRequestService;
     private final CertificateFileRepository certificateFileRepository;
 
+    @PostMapping("/save")
+    public ResponseEntity<DeathCertificateRequest> createDeathCertificateRequest(
+            @RequestBody DeathCertificateRequest request) {
+        DeathCertificateRequest savedRequest = deathCertificateRequestService.saveDeathCertificateRequest(request);
+        return new ResponseEntity<>(savedRequest, HttpStatus.CREATED);
+    }
 }
