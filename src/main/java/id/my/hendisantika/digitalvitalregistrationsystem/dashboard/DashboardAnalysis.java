@@ -38,4 +38,9 @@ public class DashboardAnalysis {
     public ResponseEntity<Map<String, Long>> getDeathCountByMonth() {
         return ResponseEntity.ok().body(deathCertificateRequestService.countDeathByMonth());
     }
+
+    @GetMapping("/marriage/count-by-month")
+    public ResponseEntity<Map<String, Long>> getMarriageCountByMonth() {
+        return ResponseEntity.ok().body(marriageCertificateRequestService.countMarriageByMonth());
+    }
 }
