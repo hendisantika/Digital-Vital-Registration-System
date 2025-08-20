@@ -1,8 +1,11 @@
 package id.my.hendisantika.digitalvitalregistrationsystem.email.service;
 
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
 /**
@@ -21,4 +24,21 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class EmailService {
     private final JavaMailSender mailSender;
+
+    // ✅ Send HTML email (without attachment)
+    public void sendEmail(String to, String subject, String htmlContent) {
+        try {
+            MimeMessage mimeMessage = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "UTF-8");
+            helper.setTo(to);
+            helper.setSubject(subject);
+            helper.setText(htmlContent, true); // true = HTML content
+            mailSender.send(mimeMessage);
+
+            log.info("HTML email sent to: {}, Subject: {}", to, subject);
+        } catch (MessagingException e) {
+            log.error("Failed to send HTML email to {}: {}", to, e.getMessage());
+        }
+    }
+
 }
