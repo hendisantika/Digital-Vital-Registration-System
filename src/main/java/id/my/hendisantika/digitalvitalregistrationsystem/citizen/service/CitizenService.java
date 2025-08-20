@@ -141,4 +141,13 @@ public class CitizenService {
                 .filter(cit -> cit.getStatus().equals(CitizenStatus.APPROVED))
                 .map(CitizenDtoMapper::mapToDto).collect(Collectors.toList());
     }
+
+    //@Cacheable(value = "pendingList")
+    public List<CitizenResponseDto> getPendingCitizens() {
+        return citizenRepository.findAll()
+                .stream()
+                .filter(cit -> cit.getStatus().equals(CitizenStatus.PENDING))
+                .map(CitizenDtoMapper::mapToDto)
+                .collect(Collectors.toList());
+    }
 }
