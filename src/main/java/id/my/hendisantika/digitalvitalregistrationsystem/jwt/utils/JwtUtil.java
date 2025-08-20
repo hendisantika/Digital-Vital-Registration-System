@@ -1,11 +1,14 @@
 package id.my.hendisantika.digitalvitalregistrationsystem.jwt.utils;
 
+import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+
+import java.security.Key;
 
 /**
  * Created by IntelliJ IDEA.
@@ -27,4 +30,8 @@ public class JwtUtil {
     private final long EXPIRATION_TIME = 1000 * 60 * 60; // 1 hour
     @Value("${jwt.secret}")
     private String secret;
+
+    private Key getSigningKey() {
+        return Keys.hmacShaKeyFor(secret.getBytes());
+    }
 }
