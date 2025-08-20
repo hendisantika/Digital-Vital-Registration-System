@@ -1,6 +1,8 @@
 package id.my.hendisantika.digitalvitalregistrationsystem.marriage.service;
 
+import id.my.hendisantika.digitalvitalregistrationsystem.certificate.enums.CertificateStatus;
 import id.my.hendisantika.digitalvitalregistrationsystem.certificate.repository.CertificateFileRepository;
+import id.my.hendisantika.digitalvitalregistrationsystem.citizen.model.Citizen;
 import id.my.hendisantika.digitalvitalregistrationsystem.citizen.repository.CitizenDocumentRepository;
 import id.my.hendisantika.digitalvitalregistrationsystem.citizen.repository.CitizenRepository;
 import id.my.hendisantika.digitalvitalregistrationsystem.marriage.dto.MarriageCertificateResponseDto;
@@ -13,9 +15,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.management.Notification;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Base64;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 /**
@@ -74,4 +80,55 @@ public class MarriageCertificateRequestService {
         return marriageCertificateRequestRepository.existsByRequestedById(id);
     }
 
+    public void sendVideoVerificationLink(Long id) {
+        MarriageCertificateRequest marriageCertificateRequest = marriageCertificateRequestRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Could not find marriage certificate request with id: " + id));
+
+        // Generate the Jitsi meeting link
+        String meetingLink = "https://meet.jit.si/marriagerequest-" + UUID.randomUUID();
+        String scheduledTime = LocalDateTime.now().plusHours(24).format(DateTimeFormatter.ofPattern("dd MMMM yyyy, hh:mm a"));
+
+        // Set status and meeting link
+        marriageCertificateRequest.setStatus(CertificateStatus.PENDING_VIDEO_CALL_VERIFICATION);
+        marriageCertificateRequest.setVideoVerificationLink(meetingLink);
+        marriageCertificateRequest.setScheduledTime(scheduledTime);
+        MarriageCertificateRequest savedRequest = marriageCertificateRequestRepository.save(marriageCertificateRequest);
+
+        // Get citizen who requested
+        Citizen citizen = citizenRepository.findById(marriageCertificateRequest.getRequestedBy().getId())
+                .orElseThrow(() -> new RuntimeException("Could not find citizen with id: " + id));
+
+        // Define a time (could be scheduled or current + 1 hour)
+
+        // Compose the email message
+        String emailMessage = String.format(
+                "Dear %s,%s,\n\n" +
+                        "Your marriage certificate request is under review. A video verification call has been scheduled.\n\n" +
+                        "📅 Scheduled Time: %s\n" +
+                        "🔗 Video Link: %s\n\n" +
+                        "Please ensure both you and your partner are present with the following documents:\n" +
+                        "1. Citizenship certificate\n" +
+                        "2. Passport (if foreign partner)\n" +
+                        "3. Ward office recommendation\n" +
+                        "4. Marriage photo\n\n" +
+                        "Please join the video call 5 minutes early. Ensure your camera and microphone are working.\n\n" +
+                        "Best regards,\nSmart Municipality Services",
+                citizen.getFirstName(), citizen.getLastName(),
+                scheduledTime,
+                meetingLink
+        );
+
+        // Build and send the notification
+        Notification notification = Notification.builder()
+                .event(NotificationEvent.REVIEWING)
+                .channel(DeliveryChannel.EMAIL)
+                .type(NotificationType.EMAIL)
+                .email(marriageCertificateRequest.getRequestedBy().getUserEmail())
+                .citizen(citizen)
+                .message(emailMessage)
+                .createdAt(LocalDateTime.now())
+                .build();
+
+        notificationService.sendAndDispatch(notification);
+    }
 }
