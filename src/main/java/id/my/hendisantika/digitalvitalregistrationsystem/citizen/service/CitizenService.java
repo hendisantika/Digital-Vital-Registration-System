@@ -78,4 +78,9 @@ public class CitizenService {
     public List<CitizenResponseDto> getAllCitizens() {
         return citizenRepository.findAll().stream().map(CitizenDtoMapper::mapToDto).collect(Collectors.toList());
     }
+
+    //@Cacheable(value = "citizenCount")
+    public Long getCitizenCount() {
+        return citizenRepository.count();
+    }
 }
