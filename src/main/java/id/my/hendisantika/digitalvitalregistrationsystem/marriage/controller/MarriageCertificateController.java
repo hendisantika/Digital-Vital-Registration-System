@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
@@ -52,5 +53,10 @@ public class MarriageCertificateController {
     @GetMapping("/list")
     public ResponseEntity<List<MarriageCertificateResponseDto>> getAllMarriageCertificateRequests() {
         return new ResponseEntity<>(marriageCertificateRequestService.getAllRequest(), HttpStatus.OK);
+    }
+
+    @GetMapping("{id}/by-id")
+    private ResponseEntity<MarriageCertificateResponseDto> getMarriageCertificateRequestById(@PathVariable Long id) {
+        return new ResponseEntity<>(marriageCertificateRequestService.getById(id), HttpStatus.OK);
     }
 }
