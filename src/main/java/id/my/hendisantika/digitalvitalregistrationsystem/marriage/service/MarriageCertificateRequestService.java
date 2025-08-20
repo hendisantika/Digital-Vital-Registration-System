@@ -69,4 +69,9 @@ public class MarriageCertificateRequestService {
     public MarriageCertificateResponseDto getById(Long id) {
         return marriageCertificateRequestRepository.findByRequestedById(id).stream().map(MarriageCertificateRequestMapper::toMarriageCertificateResponseDto).findFirst().orElse(null);
     }
+
+    public boolean existsByRequestId(Long id) {
+        return marriageCertificateRequestRepository.existsByRequestedById(id);
+    }
+
 }
