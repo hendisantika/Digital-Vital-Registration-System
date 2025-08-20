@@ -128,4 +128,10 @@ public class CitizenService {
     public Long getFemaleCount() {
         return citizenRepository.countByGender(Gender.FEMALE);
     }
+
+    // @Cacheable(value = "others")
+    public Long getOthersCount() {
+        return citizenRepository.countByGender(Gender.OTHERS);
+    }
+
 }
