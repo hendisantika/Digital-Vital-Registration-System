@@ -24,6 +24,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -206,5 +207,11 @@ public class MarriageCertificateRequestService {
 
     public Long countMarriageCertificateRequests() {
         return marriageCertificateRequestRepository.count();
+    }
+
+    public Map<String, Long> countMarriageByMonth() {
+        return marriageCertificateRequestRepository.findAll()
+                .stream()
+                .collect(Collectors.groupingBy(req -> req.getRequestedAt().getMonth().name(), Collectors.counting()));
     }
 }
