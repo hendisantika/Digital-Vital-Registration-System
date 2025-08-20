@@ -214,4 +214,8 @@ public class MarriageCertificateRequestService {
                 .stream()
                 .collect(Collectors.groupingBy(req -> req.getRequestedAt().getMonth().name(), Collectors.counting()));
     }
+
+    public MarriageCertificateRequest getRequestById(Long id) {
+        return marriageCertificateRequestRepository.findById(id).orElse(null);
+    }
 }
