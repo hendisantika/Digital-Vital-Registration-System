@@ -1,5 +1,6 @@
 package id.my.hendisantika.digitalvitalregistrationsystem.marriage.service;
 
+import id.my.hendisantika.digitalvitalregistrationsystem.certificate.certificateFile.CertificateFile;
 import id.my.hendisantika.digitalvitalregistrationsystem.certificate.enums.CertificateStatus;
 import id.my.hendisantika.digitalvitalregistrationsystem.certificate.repository.CertificateFileRepository;
 import id.my.hendisantika.digitalvitalregistrationsystem.citizen.model.Citizen;
@@ -17,8 +18,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.management.Notification;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 import java.util.UUID;
@@ -127,6 +130,69 @@ public class MarriageCertificateRequestService {
                 .citizen(citizen)
                 .message(emailMessage)
                 .createdAt(LocalDateTime.now())
+                .build();
+
+        notificationService.sendAndDispatch(notification);
+    }
+
+    public void approve(Long id) {
+        MarriageCertificateRequest marriageCertificateRequest = marriageCertificateRequestRepository
+                .findById(id)
+                .orElseThrow(() -> new RuntimeException("Could not find marriage certificate request with id: " + id));
+
+        marriageCertificateRequest.setStatus(CertificateStatus.APPROVED);
+        marriageCertificateRequest.setVerifiedAt(LocalDate.now());
+        MarriageCertificateRequest savedRequest = marriageCertificateRequestRepository.save(marriageCertificateRequest);
+
+        CertificateFile file = certificateFileRepository.findByMarriageCertificateRequestId(id)
+                .orElseGet(() -> generateMarriageCertificate(id));
+
+        Citizen citizen = citizenRepository
+                .findById(savedRequest.getRequestedBy().getId())
+                .orElseThrow(() -> new RuntimeException("Could not find citizen with id: " + savedRequest.getRequestedBy().getId()));
+
+        // Prepare email recipients
+        List<String> recipients = new ArrayList<>();
+        if (savedRequest.getRequestedBy().getUserEmail() != null) {
+            recipients.add(savedRequest.getRequestedBy().getUserEmail());
+        }
+
+        if (savedRequest.getForeignPartner() != null && savedRequest.getForeignPartner().getEmail() != null) {
+            recipients.add(savedRequest.getForeignPartner().getEmail());
+        }
+
+        // Prepare message and subject
+        String subject = "🎉 Congratulations! Your Marriage Certificate Has Been Approved";
+        String message = String.format(
+                """
+                         Congratulations! Your Marriage Certificate Has Been Approved\s
+                        
+                        Dear %s,
+                        
+                        We are pleased to inform you that your marriage certificate request has been approved.
+                        You can find the approved certificate attached to this email.
+                        
+                        If you have any questions or need further assistance, feel free to contact your municipality office.
+                        
+                        Warm regards,
+                        Smart Municipality Team""",
+                citizen.getFirstName()
+        );
+
+        // Send email with attachment to all recipients (assuming your emailService supports multi-recipient sending)
+        // emailService.sendEmailWithAttachment(recipients, subject, message, file.getFilePath());
+
+        // Send notification to main citizen
+        Notification notification = Notification.builder()
+                .event(NotificationEvent.VERIFICATION_APPROVED)
+                .channel(DeliveryChannel.BOTH)
+                .type(NotificationType.EMAIL)
+                .email(citizen.getUserEmail())
+                .citizen(citizen)
+                .message(message)
+                .createdAt(LocalDateTime.now())
+                .certificate(file)
+                .certificateId(file.getId())
                 .build();
 
         notificationService.sendAndDispatch(notification);
