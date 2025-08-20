@@ -2,8 +2,13 @@ package id.my.hendisantika.digitalvitalregistrationsystem.email.controller;
 
 import id.my.hendisantika.digitalvitalregistrationsystem.email.service.OTPService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Map;
 
 /**
  * Created by IntelliJ IDEA.
@@ -22,4 +27,14 @@ import org.springframework.web.bind.annotation.RestController;
 public class OTPController {
     private final OTPService otpService;
     private final JwtUtil jwtUtil;
+
+    @PostMapping("/send")
+    public ResponseEntity<Map<String, String>> sendOTP(@RequestParam String email) {
+        try {
+            otpService.generateAndSendOTP(email);
+            return ResponseEntity.ok(Map.of("message", "OTP sent to " + email));
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
+        }
+    }
 }
