@@ -91,4 +91,9 @@ public class MarriageCertificateController {
     public ResponseEntity<Long> countMarriageCertificateRequests() {
         return new ResponseEntity<>(marriageCertificateRequestService.countMarriageCertificateRequests(), HttpStatus.OK);
     }
+
+    @GetMapping("/by-request/{id}")
+    public ResponseEntity<MarriageCertificateRequest> getMarriageCertificateById(@PathVariable("id") Long id) {
+        return new ResponseEntity<>(marriageCertificateRequestService.getRequestById(id), HttpStatus.OK);
+    }
 }
