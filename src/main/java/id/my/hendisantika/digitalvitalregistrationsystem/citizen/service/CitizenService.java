@@ -134,4 +134,11 @@ public class CitizenService {
         return citizenRepository.countByGender(Gender.OTHERS);
     }
 
+    // @Cacheable(value = "approvedList")
+    public List<CitizenResponseDto> getApprovedCitizens() {
+        return citizenRepository.findAll()
+                .stream()
+                .filter(cit -> cit.getStatus().equals(CitizenStatus.APPROVED))
+                .map(CitizenDtoMapper::mapToDto).collect(Collectors.toList());
+    }
 }
