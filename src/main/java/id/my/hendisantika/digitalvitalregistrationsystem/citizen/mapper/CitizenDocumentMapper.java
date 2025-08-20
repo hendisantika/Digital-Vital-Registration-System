@@ -51,4 +51,20 @@ public class CitizenDocumentMapper {
                 .deathCertificateRequest(dto.getDeathCertificateRequestId())
                 .build();
     }
+
+    public static CitizenDocument updateDocument(CitizenDocumentRequestDto dto, Citizen citizen) throws IOException {
+        return CitizenDocument.builder()
+                .citizen(citizen)
+                .documentType(dto.getDocumentType())
+                .fileData(Base64.getEncoder().encodeToString(dto.getFile().getBytes()))
+                .fileName(dto.getFile().getOriginalFilename())
+                .uploadDate(citizen.getCreatedAt())
+                .verifiedBy(dto.getVerifiedBy())
+                .verifiedDate(dto.getVerifiedDate())
+                .createdAt(citizen.getCreatedAt())
+                .updatedAt(LocalDate.now())
+
+                .deathCertificateRequest(dto.getDeathCertificateRequestId())
+                .build();
+    }
 }
