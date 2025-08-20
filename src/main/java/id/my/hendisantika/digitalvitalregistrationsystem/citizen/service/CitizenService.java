@@ -14,7 +14,10 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -157,5 +160,50 @@ public class CitizenService {
                 .stream().filter(citizen -> citizen.getStatus().equals(CitizenStatus.REJECTED))
                 .map(CitizenDtoMapper::mapToDto)
                 .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public void rejectCitizen(Long id, String rejectionReason, Long verifiedBy) {
+        Citizen citizen = citizenRepository.findById(id).orElseThrow(() -> new RuntimeException("Citizen not found"));
+        citizen.setStatus(CitizenStatus.REJECTED);
+        citizen.setReasonForRejection(rejectionReason);
+        citizen.setVerifiedBy(verifiedBy);
+        citizen.setVerifiedDate(LocalDate.now());
+        Citizen savedCitizen = citizenRepository.save(citizen);
+        String rejectedHtmlMessage = String.format("""
+                            <div style="background-color:#fef2f2; padding: 20px; border: 1px solid #fca5a5; border-radius: 12px; font-family: Arial, sans-serif; color: #991b1b;">
+                              <h2 style="margin-top: 0; display: flex; align-items: center; font-size: 22px;">
+                                <span style="font-size: 28px; color: #ef4444; margin-right: 10px;">❌</span>
+                                Digital Vital Registration
+                              </h2>
+                              <p>Hello, <strong>%s</strong> 👋</p>
+                              <p>We regret to inform you that your citizen profile has been <strong>rejected</strong>.</p>
+                              <p>Please visit your local municipality office for further assistance.</p>
+                              <p style="margin-top: 12px; background-color: #fee2e2; padding: 12px; border-left: 4px solid #dc2626; font-weight: bold;">
+                                📝 Reason: %s
+                              </p>
+                              <p style="margin-top: 12px; font-size: 14px; color: #7f1d1d;">
+                                🕒 <strong>Rejected on:</strong> %s
+                              </p>
+                            </div>
+                        """,
+                citizen.getFirstName(),
+                rejectionReason,
+                LocalDateTime.now().format(DateTimeFormatter.ofPattern("MMMM dd, yyyy 'at' hh:mm a"))
+        );
+
+        Notification.NotificationBuilder notification = Notification.builder()
+                .event(NotificationEvent.VERIFICATION_REJECTED)
+                .channel(DeliveryChannel.EMAIL)
+                .type(NotificationType.EMAIL)
+                .email(savedCitizen.getUserEmail())
+                .citizen(savedCitizen)
+                .message(rejectedHtmlMessage)
+                .createdAt(LocalDateTime.now());
+
+
+        notificationService.sendAndDispatch(notification.build());
+        log.warn("Citizen rejected: {}", savedCitizen.getId());
+
     }
 }
