@@ -2,12 +2,14 @@ package id.my.hendisantika.digitalvitalregistrationsystem.marriage.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import id.my.hendisantika.digitalvitalregistrationsystem.certificate.certificateFile.CertificateFile;
 import id.my.hendisantika.digitalvitalregistrationsystem.certificate.repository.CertificateFileRepository;
 import id.my.hendisantika.digitalvitalregistrationsystem.marriage.dto.MarriageCertificateResponseDto;
 import id.my.hendisantika.digitalvitalregistrationsystem.marriage.dto.MarriageCertificateReviewResponseDto;
 import id.my.hendisantika.digitalvitalregistrationsystem.marriage.model.MarriageCertificateRequest;
 import id.my.hendisantika.digitalvitalregistrationsystem.marriage.service.MarriageCertificateRequestService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -102,5 +104,16 @@ public class MarriageCertificateController {
     public ResponseEntity<MarriageCertificateReviewResponseDto> getReview(@PathVariable Long id) {
         MarriageCertificateReviewResponseDto reviewDto = marriageCertificateRequestService.getReviewById(id);
         return ResponseEntity.ok(reviewDto);
+    }
+
+    @GetMapping("/{id}/generate")
+    public ResponseEntity<byte[]> generateMarriageCertificate(@PathVariable Long id) {
+        CertificateFile file = certificateFileRepository.findByMarriageCertificateRequestId(id)
+                .orElseGet(() -> marriageCertificateRequestService.generateMarriageCertificate(id));
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + file.getFilePath())
+                .contentType(MediaType.APPLICATION_PDF)
+                .body(file.getFileData());
     }
 }
