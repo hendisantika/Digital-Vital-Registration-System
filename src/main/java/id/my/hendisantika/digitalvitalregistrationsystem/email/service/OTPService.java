@@ -58,4 +58,18 @@ public class OTPService {
 
         log.info("OTP sent to {}: {}", normalizedEmail, otp);
     }
+
+    public boolean verifyOTP(String email, String inputOtp) {
+        String normalizedEmail = normalizeEmail(email);
+        String redisKey = "otp:" + normalizedEmail;
+
+        ValueOperations<String, String> ops = redisTemplate.opsForValue();
+        String cachedOtp = ops.get(redisKey);
+
+        if (cachedOtp != null && cachedOtp.equals(inputOtp)) {
+            redisTemplate.delete(redisKey); // Delete after successful verification
+            return true;
+        }
+        return false;
+    }
 }
