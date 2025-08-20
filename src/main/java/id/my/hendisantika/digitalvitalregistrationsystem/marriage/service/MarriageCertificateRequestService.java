@@ -3,6 +3,8 @@ package id.my.hendisantika.digitalvitalregistrationsystem.marriage.service;
 import id.my.hendisantika.digitalvitalregistrationsystem.certificate.repository.CertificateFileRepository;
 import id.my.hendisantika.digitalvitalregistrationsystem.citizen.repository.CitizenDocumentRepository;
 import id.my.hendisantika.digitalvitalregistrationsystem.citizen.repository.CitizenRepository;
+import id.my.hendisantika.digitalvitalregistrationsystem.marriage.dto.MarriageCertificateResponseDto;
+import id.my.hendisantika.digitalvitalregistrationsystem.marriage.mapper.MarriageCertificateRequestMapper;
 import id.my.hendisantika.digitalvitalregistrationsystem.marriage.model.MarriageCertificateRequest;
 import id.my.hendisantika.digitalvitalregistrationsystem.marriage.repository.ForeignPersonRepository;
 import id.my.hendisantika.digitalvitalregistrationsystem.marriage.repository.MarriageCertificateRequestRepository;
@@ -13,6 +15,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.Base64;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by IntelliJ IDEA.
@@ -56,6 +60,9 @@ public class MarriageCertificateRequestService {
         } catch (IOException e) {
             throw new RuntimeException("File processing failed: " + e.getMessage());
         }
+    }
 
+    public List<MarriageCertificateResponseDto> getAllRequest() {
+        return marriageCertificateRequestRepository.findAll().stream().map(MarriageCertificateRequestMapper::toMarriageCertificateResponseDto).collect(Collectors.toList());
     }
 }
