@@ -3,8 +3,12 @@ package id.my.hendisantika.digitalvitalregistrationsystem.dashboard;
 import id.my.hendisantika.digitalvitalregistrationsystem.certificate.service.BirthCertificateService;
 import id.my.hendisantika.digitalvitalregistrationsystem.certificate.service.DeathCertificateRequestService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Map;
 
 /**
  * Created by IntelliJ IDEA.
@@ -25,4 +29,8 @@ public class DashboardAnalysis {
     private final BirthCertificateService birthCertificateService;
     private final MarriageCertificateRequestService marriageCertificateRequestService;
 
+    @GetMapping("/birth/count-by-month")
+    public ResponseEntity<Map<String, Long>> getBirthCountByMonth() {
+        return ResponseEntity.ok().body(birthCertificateService.countBirthByMonth());
+    }
 }
