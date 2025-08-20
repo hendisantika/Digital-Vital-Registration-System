@@ -37,4 +37,15 @@ public class OTPController {
             return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
         }
     }
+
+    @PostMapping("/verify")
+    public ResponseEntity<Map<String, String>> verifyOTP(@RequestParam String email, @RequestParam String otp) {
+        boolean isVerified = otpService.verifyOTP(email, otp);
+        if (isVerified) {
+            String token = jwtUtil.generateToken(email.trim().toLowerCase());
+            return ResponseEntity.ok(Map.of("message", "OTP verified", "token", token));
+        } else {
+            return ResponseEntity.badRequest().body(Map.of("error", "Invalid OTP."));
+        }
+    }
 }
