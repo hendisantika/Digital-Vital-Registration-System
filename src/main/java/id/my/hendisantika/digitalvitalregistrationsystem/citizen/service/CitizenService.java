@@ -294,4 +294,8 @@ public class CitizenService {
         Citizen citizen = citizenRepository.findByCitizenshipNumberAndDateOfBirth(citizenshipNumber, dateOfBirth);
         return CitizenDtoMapper.mapToDto(citizen);
     }
+
+    public List<CitizenResponseDto> getCitizenByMunicipality(String municipality) {
+        return citizenRepository.findByMunicipality(municipality);
+    }
 }
