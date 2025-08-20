@@ -77,4 +77,29 @@ public class CitizenDtoMapper {
                 .citizenshipNumber(dto.getCitizenshipNumber())
                 .build();
     }
+
+    public static void updateEntityFromDto(Citizen citizen, CitizenRequestDto dto) {
+        citizen.setFirstName(dto.getFirstName());
+        citizen.setMiddleName(dto.getMiddleName());
+        citizen.setLastName(dto.getLastName());
+        citizen.setDateOfBirth(dto.getDateOfBirth());
+        citizen.setGender(dto.getGender());
+        citizen.setSpouseName(dto.getSpouseName());
+        citizen.setFatherName(dto.getFatherName());
+        citizen.setMotherName(dto.getMotherName());
+        citizen.setGrandfatherName(dto.getGrandfatherName());
+        citizen.setGrandmotherName(dto.getGrandmotherName());
+        citizen.setNationality(dto.getNationality());
+        citizen.setDistrict(dto.getDistrict());
+        citizen.setWardNo(dto.getWardNo());
+        citizen.setMunicipality(dto.getMunicipality());
+        citizen.setTole(dto.getTole());
+        citizen.setPhoneNo(dto.getPhoneNo());
+        citizen.setVerifiedBy(dto.getVerifiedBy());
+        citizen.setVerifiedDate(dto.getVerifiedDate());
+        citizen.setMarriageStatus(dto.getMarriageStatus());
+        citizen.setCitizenshipNumber(dto.getCitizenshipNumber());
+        citizen.setStatus(CitizenStatus.PENDING);
+        citizen.setUpdatedAt(LocalDate.now());
+    }
 }
