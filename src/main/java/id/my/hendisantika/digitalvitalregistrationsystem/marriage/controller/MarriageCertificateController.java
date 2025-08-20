@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by IntelliJ IDEA.
@@ -64,6 +66,12 @@ public class MarriageCertificateController {
     @GetMapping("exist")
     private ResponseEntity<Boolean> existsByRequestedId(@RequestParam("requestedBy") Long id) {
         return new ResponseEntity<>(marriageCertificateRequestService.existsByRequestId(id), HttpStatus.OK);
+    }
+
+    @PatchMapping("/send-video-link/{id}")
+    private ResponseEntity<Map<String, String>> verifyByVideoCall(@PathVariable("id") Long id) {
+        marriageCertificateRequestService.sendVideoVerificationLink(id);
+        return ResponseEntity.ok().body(Map.of("message", "verification link success"));
     }
 
 }
