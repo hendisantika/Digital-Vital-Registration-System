@@ -81,5 +81,10 @@ public class MarriageCertificateController {
         return ResponseEntity.ok().body(Map.of("message", "Approved success"));
     }
 
+    @PatchMapping("/{id}/reject")
+    private ResponseEntity<Map<String, String>> reject(@PathVariable("id") Long id) {
+        marriageCertificateRequestService.reject(id);
+        return ResponseEntity.ok().body(Map.of("message", "Rejected success"));
+    }
 
 }
