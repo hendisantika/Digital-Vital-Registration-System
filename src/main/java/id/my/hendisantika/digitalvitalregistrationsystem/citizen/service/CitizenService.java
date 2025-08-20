@@ -8,6 +8,7 @@ import id.my.hendisantika.digitalvitalregistrationsystem.citizen.model.Citizen;
 import id.my.hendisantika.digitalvitalregistrationsystem.citizen.repository.CitizenRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
@@ -82,5 +83,10 @@ public class CitizenService {
     //@Cacheable(value = "citizenCount")
     public Long getCitizenCount() {
         return citizenRepository.count();
+    }
+
+    @CacheEvict(value = "citizenDeleteById", key = "#id")
+    public void deleteCitizenById(Long id) {
+        citizenRepository.deleteById(id);
     }
 }
