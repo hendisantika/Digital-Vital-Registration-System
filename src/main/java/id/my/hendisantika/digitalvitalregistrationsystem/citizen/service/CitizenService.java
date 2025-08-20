@@ -3,6 +3,7 @@ package id.my.hendisantika.digitalvitalregistrationsystem.citizen.service;
 import id.my.hendisantika.digitalvitalregistrationsystem.certificate.repository.CertificateFileRepository;
 import id.my.hendisantika.digitalvitalregistrationsystem.citizen.dto.CitizenRequestDto;
 import id.my.hendisantika.digitalvitalregistrationsystem.citizen.dto.CitizenResponseDto;
+import id.my.hendisantika.digitalvitalregistrationsystem.citizen.enums.CitizenStatus;
 import id.my.hendisantika.digitalvitalregistrationsystem.citizen.mapper.CitizenDtoMapper;
 import id.my.hendisantika.digitalvitalregistrationsystem.citizen.model.Citizen;
 import id.my.hendisantika.digitalvitalregistrationsystem.citizen.repository.CitizenRepository;
@@ -88,5 +89,20 @@ public class CitizenService {
     @CacheEvict(value = "citizenDeleteById", key = "#id")
     public void deleteCitizenById(Long id) {
         citizenRepository.deleteById(id);
+    }
+
+    //@CacheEvict(value = "citizenById", key = "#id")
+    public CitizenResponseDto updateCitizen(Long id, CitizenRequestDto dto) {
+        Citizen citizen = citizenRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Citizen not found"));
+        dto.setStatus(CitizenStatus.PENDING);
+
+        System.out.println("Updating citizen with: " + dto);  // ✅ Add this
+        CitizenDtoMapper.updateEntityFromDto(citizen, dto);
+
+        Citizen updated = citizenRepository.save(citizen);
+        System.out.println("Updated citizen: " + updated.getStatus());    // ✅ Add this
+
+        return CitizenDtoMapper.mapToDto(updated);
     }
 }
