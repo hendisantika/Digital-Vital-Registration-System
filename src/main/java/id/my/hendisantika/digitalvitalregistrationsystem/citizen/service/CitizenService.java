@@ -252,4 +252,8 @@ public class CitizenService {
         notificationService.sendAndDispatch(notification.build());
         log.warn("Citizen created: {}", savedCitizen.getId());
     }
+
+    public Optional<Citizen> getCitizenByUserEmail(String email) {
+        return citizenRepository.findByUserEmail(email);
+    }
 }
