@@ -6,7 +6,11 @@ import id.my.hendisantika.digitalvitalregistrationsystem.certificate.repository.
 import id.my.hendisantika.digitalvitalregistrationsystem.citizen.model.Citizen;
 import id.my.hendisantika.digitalvitalregistrationsystem.citizen.repository.CitizenDocumentRepository;
 import id.my.hendisantika.digitalvitalregistrationsystem.citizen.repository.CitizenRepository;
+import id.my.hendisantika.digitalvitalregistrationsystem.marriage.dto.CitizenDto;
+import id.my.hendisantika.digitalvitalregistrationsystem.marriage.dto.FileDto;
+import id.my.hendisantika.digitalvitalregistrationsystem.marriage.dto.ForeignPartnerDto;
 import id.my.hendisantika.digitalvitalregistrationsystem.marriage.dto.MarriageCertificateResponseDto;
+import id.my.hendisantika.digitalvitalregistrationsystem.marriage.dto.MarriageCertificateReviewResponseDto;
 import id.my.hendisantika.digitalvitalregistrationsystem.marriage.mapper.MarriageCertificateRequestMapper;
 import id.my.hendisantika.digitalvitalregistrationsystem.marriage.model.MarriageCertificateRequest;
 import id.my.hendisantika.digitalvitalregistrationsystem.marriage.repository.ForeignPersonRepository;
@@ -218,4 +222,72 @@ public class MarriageCertificateRequestService {
     public MarriageCertificateRequest getRequestById(Long id) {
         return marriageCertificateRequestRepository.findById(id).orElse(null);
     }
+
+    public MarriageCertificateReviewResponseDto getReviewById(Long id) {
+        MarriageCertificateRequest req = marriageCertificateRequestRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Marriage request not found"));
+
+        // Determine partner: either husband or wife (Nepali)
+        Citizen partner = req.getHusband() != null ? req.getHusband() : req.getWife();
+
+        CitizenDto partnerDto = null;
+        if (partner != null) {
+            partnerDto = CitizenDto.builder()
+                    .id(partner.getId())
+                    .fullName(partner.getFirstName() + " " + partner.getMiddleName() + " " + partner.getLastName())
+                    .gender(partner.getGender().name())
+                    .citizenshipNumber(partner.getCitizenshipNumber())
+                    .dateOfBirth(partner.getDateOfBirth())
+                    .phone(String.valueOf(partner.getPhoneNo()))
+                    .email(partner.getUserEmail()) // FIX: It's a field, not a getter
+                    .build();
+        }
+
+        ForeignPartnerDto foreignDto = null;
+        if (req.getForeignPartner() != null) {
+            foreignDto = ForeignPartnerDto.builder()
+                    .fullName(req.getForeignPartner().getFullName())
+                    .nationality(req.getForeignPartner().getNationality())
+                    .passportNumber(req.getForeignPartner().getPassportNumber())
+                    .personCitizenshipNumber(req.getForeignPartner().getPersonCitizenshipNumber())
+                    .email(req.getForeignPartner().getEmail())
+                    .contactNumber(req.getForeignPartner().getContactNumber())
+                    .dateOfBirth(req.getForeignPartner().getDateOfBirth())
+                    .passportFile(FileDto.builder()
+                            .fileName(req.getForeignPartner().getPassportFileName())
+                            .fileData(req.getForeignPartner().getPassportFileData())
+                            .build())
+                    .photoFile(FileDto.builder()
+                            .fileName(req.getForeignPartner().getPhotoFileName())
+                            .fileData(req.getForeignPartner().getPhotoFileData())
+                            .build())
+                    .personCitizenshipFile(FileDto.builder()
+                            .fileName(req.getForeignPartner().getPersonCitizenshipFileName())
+                            .fileData(req.getForeignPartner().getPersonCitizenshipFileData())
+                            .build())
+                    .build();
+        }
+
+        return MarriageCertificateReviewResponseDto.builder()
+                .id(req.getId())
+                .requestedByFullName(req.getRequestedBy().getFirstName())
+                .status(req.getStatus().name())
+                .videoVerificationLink(req.getVideoVerificationLink())
+                .placeOfMarriage(req.getMunicipality())
+                .marriageDate(req.getMarriageDate())
+                .requestedAt(req.getRequestedAt())
+                .verifiedAt(req.getVerifiedAt())
+                .partner(partnerDto)
+                .foreignPartner(foreignDto)
+                .wardOfficeFile(FileDto.builder()
+                        .fileName(req.getWardOfficeFileName())
+                        .fileData(req.getWardOfficeFileData())
+                        .build())
+                .marriagePhoto(FileDto.builder()
+                        .fileName(req.getMarriagePhotoFileName())
+                        .fileData(req.getMarriagePhotoData())
+                        .build())
+                .build();
+    }
+
 }
