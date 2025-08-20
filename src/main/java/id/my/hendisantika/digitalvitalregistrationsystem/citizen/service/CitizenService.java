@@ -289,4 +289,9 @@ public class CitizenService {
                 .orElseThrow(() -> new RuntimeException("Citizen not found for email: " + email));
         return citizen.getStatus();
     }
+
+    public CitizenResponseDto getCitizenByCitizenshipNumberAndDateOfBirth(String citizenshipNumber, LocalDate dateOfBirth) {
+        Citizen citizen = citizenRepository.findByCitizenshipNumberAndDateOfBirth(citizenshipNumber, dateOfBirth);
+        return CitizenDtoMapper.mapToDto(citizen);
+    }
 }
