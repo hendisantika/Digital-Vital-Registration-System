@@ -17,7 +17,9 @@ import javax.management.Notification;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Created by IntelliJ IDEA.
@@ -78,7 +80,12 @@ public class DocumentService {
         notificationService.sendAndDispatch(notification.build());
         //log.warn("Citizen created: {}", savedDocument.getCitizen().getId());
         return CitizenDocumentMapper.toResponseDto(savedDocument);
-
     }
+
+    public List<CitizenDocumentResponseDto> getAllDocuments() {
+        List<CitizenDocument> documents = citizenDocumentRepository.findAll();
+        return documents.stream().map(CitizenDocumentMapper::toResponseDto).collect(Collectors.toList());
+    }
+
 
 }
