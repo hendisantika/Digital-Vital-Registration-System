@@ -203,4 +203,8 @@ public class MarriageCertificateRequestService {
         marriageCertificateRequest.setStatus(CertificateStatus.REJECTED);
         marriageCertificateRequestRepository.save(marriageCertificateRequest);
     }
+
+    public Long countMarriageCertificateRequests() {
+        return marriageCertificateRequestRepository.count();
+    }
 }
