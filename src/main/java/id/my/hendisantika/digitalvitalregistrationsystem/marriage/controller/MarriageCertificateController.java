@@ -25,6 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * Created by IntelliJ IDEA.
@@ -115,5 +116,10 @@ public class MarriageCertificateController {
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + file.getFilePath())
                 .contentType(MediaType.APPLICATION_PDF)
                 .body(file.getFileData());
+    }
+
+    @GetMapping("/by-municipality")
+    public ResponseEntity<Optional<List<MarriageCertificateResponseDto>>> getByMunicipality(@RequestParam String municipality) {
+        return ResponseEntity.ok().body(marriageCertificateRequestService.getMarriageCertificateByMunicipality(municipality));
     }
 }
