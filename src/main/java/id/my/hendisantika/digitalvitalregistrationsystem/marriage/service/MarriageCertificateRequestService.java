@@ -3,7 +3,9 @@ package id.my.hendisantika.digitalvitalregistrationsystem.marriage.service;
 import id.my.hendisantika.digitalvitalregistrationsystem.certificate.certificateFile.CertificateFile;
 import id.my.hendisantika.digitalvitalregistrationsystem.certificate.enums.CertificateStatus;
 import id.my.hendisantika.digitalvitalregistrationsystem.certificate.repository.CertificateFileRepository;
+import id.my.hendisantika.digitalvitalregistrationsystem.citizen.enums.Gender;
 import id.my.hendisantika.digitalvitalregistrationsystem.citizen.model.Citizen;
+import id.my.hendisantika.digitalvitalregistrationsystem.citizen.model.CitizenDocument;
 import id.my.hendisantika.digitalvitalregistrationsystem.citizen.repository.CitizenDocumentRepository;
 import id.my.hendisantika.digitalvitalregistrationsystem.citizen.repository.CitizenRepository;
 import id.my.hendisantika.digitalvitalregistrationsystem.marriage.dto.CitizenDto;
@@ -12,6 +14,7 @@ import id.my.hendisantika.digitalvitalregistrationsystem.marriage.dto.ForeignPar
 import id.my.hendisantika.digitalvitalregistrationsystem.marriage.dto.MarriageCertificateResponseDto;
 import id.my.hendisantika.digitalvitalregistrationsystem.marriage.dto.MarriageCertificateReviewResponseDto;
 import id.my.hendisantika.digitalvitalregistrationsystem.marriage.mapper.MarriageCertificateRequestMapper;
+import id.my.hendisantika.digitalvitalregistrationsystem.marriage.model.ForeignPerson;
 import id.my.hendisantika.digitalvitalregistrationsystem.marriage.model.MarriageCertificateRequest;
 import id.my.hendisantika.digitalvitalregistrationsystem.marriage.repository.ForeignPersonRepository;
 import id.my.hendisantika.digitalvitalregistrationsystem.marriage.repository.MarriageCertificateRequestRepository;
@@ -21,12 +24,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.management.Notification;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Base64;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -290,4 +296,93 @@ public class MarriageCertificateRequestService {
                 .build();
     }
 
+    public CertificateFile generateMarriageCertificate(Long id) {
+        if (id == null) throw new IllegalArgumentException("Marriage certificate request ID must not be null");
+
+        MarriageCertificateRequest req = marriageCertificateRequestRepository
+                .findById(id)
+                .orElseThrow(() -> new RuntimeException("Marriage request not found"));
+
+        Map<String, Object> params = new HashMap<>();
+        Citizen requestedBy = citizenRepository.findById(req.getRequestedBy().getId())
+                .orElseThrow(() -> new RuntimeException("Citizen not found"));
+
+        // Case 1: Mixed Marriage (Nepali + Foreign)
+        if (req.getForeignPartner() != null) {
+            ForeignPerson foreign = foreignPersonRepository.findById(req.getForeignPartner().getId())
+                    .orElseThrow(() -> new RuntimeException("Foreign partner not found"));
+
+            boolean isHusband = foreign.getGender() == Gender.MALE;
+
+            // Get citizen photo
+            List<CitizenDocument> citizenDocs = citizenDocumentRepository.findByCitizen_Id(requestedBy.getId());
+            if (citizenDocs.isEmpty()) throw new RuntimeException("Citizen photo not found");
+            InputStream citizenPhoto = new ByteArrayInputStream(Base64.getDecoder().decode(citizenDocs.getFirst().getFileData().getBytes()));
+
+            // Decode foreign partner photo
+            InputStream foreignPhoto = new ByteArrayInputStream(Base64.getDecoder().decode(foreign.getPhotoFileData().getBytes()));
+
+            if (isHusband) {
+                // Foreign husband, Nepali wife
+                params.put("husbandName", foreign.getFullName());
+                params.put("wifeName", requestedBy.getFirstName() + " " + requestedBy.getLastName());
+                params.put("husbandPhoto", foreignPhoto);
+                params.put("wifePhoto", citizenPhoto);
+                params.put("foreignHusbandCitizenshipNumber", foreign.getPersonCitizenshipNumber());
+                params.put("passportNumber", foreign.getPassportNumber());
+                params.put("wifeCitizenshipNumber", foreign.getPersonCitizenshipNumber());
+
+            } else {
+                // Nepali husband, foreign wife
+                params.put("husbandName", requestedBy.getFirstName() + " " + requestedBy.getLastName());
+                params.put("wifeName", foreign.getFullName());
+                params.put("husbandPhoto", citizenPhoto);
+                params.put("wifePhoto", foreignPhoto);
+                params.put("wifeCitizenshipNumber", foreign.getPersonCitizenshipNumber());
+                params.put("passportNumber", foreign.getPassportNumber());
+                params.put("husbandCitizenshipNumber", foreign.getPersonCitizenshipNumber());
+
+            }
+
+
+        }
+
+        // Case 2: Both Nepali Citizens
+        else if (req.getHusband() != null && req.getWife() != null) {
+            Citizen husband = req.getHusband().getGender() == Gender.MALE ? req.getHusband() : req.getWife();
+            Citizen wife = req.getHusband().getGender() == Gender.FEMALE ? req.getHusband() : req.getWife();
+
+            List<CitizenDocument> husbandDocs = citizenDocumentRepository.findByCitizen_Id(husband.getId());
+            List<CitizenDocument> wifeDocs = citizenDocumentRepository.findByCitizen_Id(wife.getId());
+
+            if (husbandDocs.isEmpty() || wifeDocs.isEmpty())
+                throw new RuntimeException("Husband or wife photo not found");
+
+            InputStream husbandPhoto = new ByteArrayInputStream(Base64.getDecoder().decode(husbandDocs.getFirst().getFileData().getBytes()));
+            InputStream wifePhoto = new ByteArrayInputStream(Base64.getDecoder().decode(wifeDocs.getFirst().getFileData().getBytes()));
+
+            params.put("husbandName", husband.getFirstName() + " " + husband.getLastName());
+            params.put("wifeName", wife.getFirstName() + " " + wife.getLastName());
+            params.put("husbandPhoto", husbandPhoto);
+            params.put("wifePhoto", wifePhoto);
+            params.put("husbandCitizenshipNumber", husband.getCitizenshipNumber());
+            params.put("wifeCitizenshipNumber", wife.getCitizenshipNumber());
+        } else {
+            throw new RuntimeException("Invalid marriage data: Cannot determine husband and wife.");
+        }
+
+        // Common params
+        params.put("requestedBy", requestedBy.getFirstName() + " " + requestedBy.getLastName());
+        params.put("marriageDate", req.getMarriageDate().toString());
+        params.put("requestedAt", req.getRequestedAt().toString());
+        params.put("verifiedAt", LocalDate.now().toString());
+        params.put("issuedBy", requestedBy.getMunicipality());
+        params.put("VerifiedBy", req.getVerifiedBy());
+
+        // Generate certificate
+        CertificateFile file = marriageCertificateReportService.generateMarriageCertificateReport(params, requestedBy, req);
+        req.setCertificateFile(file);
+
+        return file;
+    }«
 }
