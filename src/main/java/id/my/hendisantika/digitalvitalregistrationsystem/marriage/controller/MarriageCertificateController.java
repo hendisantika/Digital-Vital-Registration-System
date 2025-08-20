@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import id.my.hendisantika.digitalvitalregistrationsystem.certificate.repository.CertificateFileRepository;
 import id.my.hendisantika.digitalvitalregistrationsystem.marriage.dto.MarriageCertificateResponseDto;
+import id.my.hendisantika.digitalvitalregistrationsystem.marriage.dto.MarriageCertificateReviewResponseDto;
 import id.my.hendisantika.digitalvitalregistrationsystem.marriage.model.MarriageCertificateRequest;
 import id.my.hendisantika.digitalvitalregistrationsystem.marriage.service.MarriageCertificateRequestService;
 import lombok.RequiredArgsConstructor;
@@ -95,5 +96,11 @@ public class MarriageCertificateController {
     @GetMapping("/by-request/{id}")
     public ResponseEntity<MarriageCertificateRequest> getMarriageCertificateById(@PathVariable("id") Long id) {
         return new ResponseEntity<>(marriageCertificateRequestService.getRequestById(id), HttpStatus.OK);
+    }
+
+    @GetMapping("/review/{id}")
+    public ResponseEntity<MarriageCertificateReviewResponseDto> getReview(@PathVariable Long id) {
+        MarriageCertificateReviewResponseDto reviewDto = marriageCertificateRequestService.getReviewById(id);
+        return ResponseEntity.ok(reviewDto);
     }
 }
