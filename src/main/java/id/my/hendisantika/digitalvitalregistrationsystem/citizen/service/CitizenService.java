@@ -15,6 +15,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -104,5 +105,16 @@ public class CitizenService {
         System.out.println("Updated citizen: " + updated.getStatus());    // ✅ Add this
 
         return CitizenDtoMapper.mapToDto(updated);
+    }
+
+    // @Cacheable(value = "citizenById", key = "#id")
+
+    public CitizenResponseDto getCitizenById(Long id) {
+        Optional<Citizen> citizen = citizenRepository.findById(id);
+        if (citizen.isPresent()) {
+            return CitizenDtoMapper.mapToDto(citizen.get());
+        } else {
+            throw new RuntimeException("Citizen not found");
+        }
     }
 }
