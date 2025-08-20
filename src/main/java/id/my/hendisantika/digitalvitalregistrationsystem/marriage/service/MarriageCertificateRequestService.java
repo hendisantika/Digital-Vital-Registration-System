@@ -65,4 +65,8 @@ public class MarriageCertificateRequestService {
     public List<MarriageCertificateResponseDto> getAllRequest() {
         return marriageCertificateRequestRepository.findAll().stream().map(MarriageCertificateRequestMapper::toMarriageCertificateResponseDto).collect(Collectors.toList());
     }
+
+    public MarriageCertificateResponseDto getById(Long id) {
+        return marriageCertificateRequestRepository.findByRequestedById(id).stream().map(MarriageCertificateRequestMapper::toMarriageCertificateResponseDto).findFirst().orElse(null);
+    }
 }
