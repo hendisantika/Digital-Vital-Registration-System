@@ -35,6 +35,7 @@ import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -384,5 +385,16 @@ public class MarriageCertificateRequestService {
         req.setCertificateFile(file);
 
         return file;
-    }«
+    }
+
+    public Optional<List<MarriageCertificateResponseDto>> getMarriageCertificateByMunicipality(String municipality) {
+        List<MarriageCertificateRequest> certificateRequests = marriageCertificateRequestRepository
+                .findByMunicipality(municipality).stream().toList();
+
+        List<MarriageCertificateResponseDto> responseDtos = certificateRequests.stream()
+                .map(MarriageCertificateRequestMapper::toMarriageCertificateResponseDto)
+                .collect(Collectors.toList());
+
+        return Optional.of(responseDtos);
+    }
 }
