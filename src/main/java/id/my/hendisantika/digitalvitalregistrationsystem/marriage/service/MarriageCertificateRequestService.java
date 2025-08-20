@@ -197,4 +197,10 @@ public class MarriageCertificateRequestService {
 
         notificationService.sendAndDispatch(notification);
     }
+
+    public void reject(Long id) {
+        MarriageCertificateRequest marriageCertificateRequest = marriageCertificateRequestRepository.findById(id).orElseThrow(() -> new RuntimeException("Could not find marriage certificate request with id: " + id));
+        marriageCertificateRequest.setStatus(CertificateStatus.REJECTED);
+        marriageCertificateRequestRepository.save(marriageCertificateRequest);
+    }
 }
