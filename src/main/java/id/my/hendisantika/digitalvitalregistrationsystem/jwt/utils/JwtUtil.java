@@ -1,5 +1,7 @@
 package id.my.hendisantika.digitalvitalregistrationsystem.jwt.utils;
 
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +11,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
+import java.util.Date;
 
 /**
  * Created by IntelliJ IDEA.
@@ -33,5 +36,14 @@ public class JwtUtil {
 
     private Key getSigningKey() {
         return Keys.hmacShaKeyFor(secret.getBytes());
+    }
+
+    public String generateToken(String email) {
+        return Jwts.builder()
+                .setSubject(email)
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
+                .signWith(getSigningKey(), SignatureAlgorithm.HS256)
+                .compact();
     }
 }
