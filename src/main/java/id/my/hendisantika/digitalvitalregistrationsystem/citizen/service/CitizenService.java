@@ -1,5 +1,6 @@
 package id.my.hendisantika.digitalvitalregistrationsystem.citizen.service;
 
+import id.my.hendisantika.digitalvitalregistrationsystem.certificate.certificateFile.CertificateFile;
 import id.my.hendisantika.digitalvitalregistrationsystem.certificate.repository.CertificateFileRepository;
 import id.my.hendisantika.digitalvitalregistrationsystem.citizen.dto.CitizenRequestDto;
 import id.my.hendisantika.digitalvitalregistrationsystem.citizen.dto.CitizenResponseDto;
@@ -16,6 +17,8 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.management.Notification;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -204,6 +207,49 @@ public class CitizenService {
 
         notificationService.sendAndDispatch(notification.build());
         log.warn("Citizen rejected: {}", savedCitizen.getId());
+    }
 
+    @Transactional
+    public void approveCitizen(Long id, Long verifiedBy) {
+        Citizen citizen = citizenRepository.findById(id).orElseThrow(() -> new RuntimeException("Citizen not found"));
+        citizen.setStatus(CitizenStatus.APPROVED);
+        citizen.setVerifiedBy(verifiedBy);
+        citizen.setReasonForRejection(null);
+        citizen.setVerifiedDate(LocalDate.now());
+
+
+        String approvedHtmlMessage = String.format("""
+                            <div style="background-color:#f0fdf4;padding:20px;border:1px solid #34d399;border-radius:12px;font-family:Arial,sans-serif;color:#064e3b;">
+                              <h2 style="margin-top:0;display:flex;align-items:center;font-size:22px;">
+                                <span style="font-size:28px;color:#10b981;margin-right:10px;">✔️</span>
+                                Digital Vital Registration
+                              </h2>
+                              <p>Hello, <strong>%s</strong> 👋</p>
+                              <p>We are pleased to inform you that your citizen profile has been <strong>approved</strong> ✅ by the verification authority.</p>
+                              <p style="margin-top:12px;font-size:14px;color:#065f46;">
+                                🕒 <strong>Approved on:</strong> %s
+                              </p>
+                            </div>
+                        """,
+                citizen.getFirstName(),
+                LocalDateTime.now().format(DateTimeFormatter.ofPattern("MMMM dd, yyyy 'at' hh:mm a"))
+        );
+
+        Citizen savedCitizen = citizenRepository.save(citizen);
+        Optional<CertificateFile> certificateFileOptional = certificateFileRepository.findByCitizen_Id(id).stream().findFirst();
+
+        Notification.NotificationBuilder notification = Notification.builder()
+                .event(NotificationEvent.VERIFICATION_APPROVED)
+                .channel(DeliveryChannel.EMAIL)
+                .type(NotificationType.EMAIL)
+                .email(savedCitizen.getUserEmail())
+                .citizen(savedCitizen)
+                .message(approvedHtmlMessage)
+                .createdAt(LocalDateTime.now());
+        certificateFileOptional.ifPresent(notification::certificate);
+
+
+        notificationService.sendAndDispatch(notification.build());
+        log.warn("Citizen created: {}", savedCitizen.getId());
     }
 }
