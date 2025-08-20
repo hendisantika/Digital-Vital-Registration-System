@@ -74,4 +74,12 @@ public class MarriageCertificateController {
         return ResponseEntity.ok().body(Map.of("message", "verification link success"));
     }
 
+    @PatchMapping("/{id}/approve")
+    private ResponseEntity<Map<String, String>> approve(@PathVariable("id") Long id) {
+        marriageCertificateRequestService.approve(id);
+        generateMarriageCertificate(id);
+        return ResponseEntity.ok().body(Map.of("message", "Approved success"));
+    }
+
+
 }
