@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -59,4 +60,10 @@ public class MarriageCertificateController {
     private ResponseEntity<MarriageCertificateResponseDto> getMarriageCertificateRequestById(@PathVariable Long id) {
         return new ResponseEntity<>(marriageCertificateRequestService.getById(id), HttpStatus.OK);
     }
+
+    @GetMapping("exist")
+    private ResponseEntity<Boolean> existsByRequestedId(@RequestParam("requestedBy") Long id) {
+        return new ResponseEntity<>(marriageCertificateRequestService.existsByRequestId(id), HttpStatus.OK);
+    }
+
 }
