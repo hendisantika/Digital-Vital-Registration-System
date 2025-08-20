@@ -1,11 +1,23 @@
 package id.my.hendisantika.digitalvitalregistrationsystem.citizen.service;
 
+import id.my.hendisantika.digitalvitalregistrationsystem.certificate.certificateFile.CertificateFile;
 import id.my.hendisantika.digitalvitalregistrationsystem.certificate.repository.CertificateFileRepository;
+import id.my.hendisantika.digitalvitalregistrationsystem.citizen.dto.CitizenDocumentRequestDto;
+import id.my.hendisantika.digitalvitalregistrationsystem.citizen.dto.CitizenDocumentResponseDto;
+import id.my.hendisantika.digitalvitalregistrationsystem.citizen.mapper.CitizenDocumentMapper;
+import id.my.hendisantika.digitalvitalregistrationsystem.citizen.model.Citizen;
+import id.my.hendisantika.digitalvitalregistrationsystem.citizen.model.CitizenDocument;
 import id.my.hendisantika.digitalvitalregistrationsystem.citizen.repository.CitizenDocumentRepository;
 import id.my.hendisantika.digitalvitalregistrationsystem.citizen.repository.CitizenRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import javax.management.Notification;
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Optional;
 
 /**
  * Created by IntelliJ IDEA.
@@ -26,4 +38,47 @@ public class DocumentService {
     private final CitizenRepository citizenRepository;
     private final CertificateFileRepository certificateFileRepository;
     private final NotificationService notificationService;
+
+    public CitizenDocumentResponseDto uploadDocument(CitizenDocumentRequestDto citizenDocumentRequestDto) throws IOException {
+        Citizen citizen = citizenRepository.findById(citizenDocumentRequestDto.getCitizenId())
+                .orElseThrow(() -> new RuntimeException("Citizen Not Found"));
+        CitizenDocument citizenDocument = CitizenDocumentMapper.mapToEntity(citizenDocumentRequestDto, citizen);
+        CitizenDocument savedDocument = citizenDocumentRepository.save(citizenDocument);
+
+        Optional<CertificateFile> certificateFileOptional = certificateFileRepository.findById(savedDocument.getCitizen().getId());
+        String htmlMessage = String.format("""
+                        <div style="background-color: #f0fdf4; border: 1px solid #34d399; padding: 24px; border-radius: 12px; font-family: Arial, sans-serif; max-width: 600px; color: #064e3b;">
+                          <div style="display: flex; align-items: center; margin-bottom: 16px;">
+                            <span style="font-size: 28px; color: #10b981; margin-right: 12px;">✔️</span>
+                            <h2 style="margin: 0; font-size: 22px; font-weight: bold;">Digital Vital Registration</h2>
+                          </div>
+                          <div style="font-size: 16px; line-height: 1.6;">
+                            <p>Dear <strong>%s</strong>, 👋</p>
+                            <p>Your citizen profile has been <strong>successfully submitted</strong> and is currently <strong>under review</strong>.</p>
+                            <p style="margin-top: 12px; font-size: 14px; color: #065f46;">
+                              🕒 <strong>Submitted at:</strong> %s
+                            </p>
+                          </div>
+                        </div>
+                        """,
+                citizen.getFirstName(),
+                LocalDateTime.now().format(DateTimeFormatter.ofPattern("MMMM dd, yyyy 'at' hh:mm a")));
+
+        Notification.NotificationBuilder notification = Notification.builder()
+                .event(NotificationEvent.REVIEWING)
+                .channel(DeliveryChannel.EMAIL)
+                .type(NotificationType.EMAIL)
+                .email(savedDocument.getCitizen().getUserEmail())
+                .citizen(citizen)
+                .message(htmlMessage)
+                .createdAt(LocalDateTime.now());
+        certificateFileOptional.ifPresent(notification::certificate);
+
+
+        notificationService.sendAndDispatch(notification.build());
+        //log.warn("Citizen created: {}", savedDocument.getCitizen().getId());
+        return CitizenDocumentMapper.toResponseDto(savedDocument);
+
+    }
+
 }
