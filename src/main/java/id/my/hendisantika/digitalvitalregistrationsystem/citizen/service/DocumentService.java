@@ -4,6 +4,7 @@ import id.my.hendisantika.digitalvitalregistrationsystem.certificate.certificate
 import id.my.hendisantika.digitalvitalregistrationsystem.certificate.repository.CertificateFileRepository;
 import id.my.hendisantika.digitalvitalregistrationsystem.citizen.dto.CitizenDocumentRequestDto;
 import id.my.hendisantika.digitalvitalregistrationsystem.citizen.dto.CitizenDocumentResponseDto;
+import id.my.hendisantika.digitalvitalregistrationsystem.citizen.enums.DocumentType;
 import id.my.hendisantika.digitalvitalregistrationsystem.citizen.mapper.CitizenDocumentMapper;
 import id.my.hendisantika.digitalvitalregistrationsystem.citizen.model.Citizen;
 import id.my.hendisantika.digitalvitalregistrationsystem.citizen.model.CitizenDocument;
@@ -12,11 +13,13 @@ import id.my.hendisantika.digitalvitalregistrationsystem.citizen.repository.Citi
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.management.Notification;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -87,5 +90,23 @@ public class DocumentService {
         return documents.stream().map(CitizenDocumentMapper::toResponseDto).collect(Collectors.toList());
     }
 
+    public List<CitizenDocumentResponseDto> uploadMultipleDocuments(
+            MultipartFile[] files, Long citizenId, DocumentType documentType, Long verifiedBy) throws IOException {
+
+        List<CitizenDocumentResponseDto> responseList = new ArrayList<>();
+
+        for (MultipartFile file : files) {
+            CitizenDocumentRequestDto dto = CitizenDocumentRequestDto.builder()
+                    .citizenId(citizenId)
+                    .documentType(documentType)
+                    .verifiedBy(verifiedBy)
+                    .file(file)
+                    .build();
+
+            CitizenDocumentResponseDto response = uploadDocument(dto); // reuse existing logic
+            responseList.add(response);
+        }
+        return responseList;
+    }
 
 }
