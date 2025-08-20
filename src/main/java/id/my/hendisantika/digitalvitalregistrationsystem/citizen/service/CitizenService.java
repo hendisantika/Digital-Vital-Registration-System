@@ -150,4 +150,12 @@ public class CitizenService {
                 .map(CitizenDtoMapper::mapToDto)
                 .collect(Collectors.toList());
     }
+
+    //  @Cacheable(value = "rejectedList")
+    public List<CitizenResponseDto> getRejectedCitizens() {
+        return citizenRepository.findAll()
+                .stream().filter(citizen -> citizen.getStatus().equals(CitizenStatus.REJECTED))
+                .map(CitizenDtoMapper::mapToDto)
+                .collect(Collectors.toList());
+    }
 }
