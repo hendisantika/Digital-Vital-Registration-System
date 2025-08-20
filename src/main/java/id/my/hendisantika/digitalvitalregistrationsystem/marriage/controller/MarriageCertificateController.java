@@ -87,4 +87,8 @@ public class MarriageCertificateController {
         return ResponseEntity.ok().body(Map.of("message", "Rejected success"));
     }
 
+    @GetMapping("/count-marriage")
+    public ResponseEntity<Long> countMarriageCertificateRequests() {
+        return new ResponseEntity<>(marriageCertificateRequestService.countMarriageCertificateRequests(), HttpStatus.OK);
+    }
 }
