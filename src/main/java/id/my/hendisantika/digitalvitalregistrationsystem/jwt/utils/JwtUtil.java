@@ -1,5 +1,6 @@
 package id.my.hendisantika.digitalvitalregistrationsystem.jwt.utils;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -59,5 +60,14 @@ public class JwtUtil {
             logger.error("JWT validation error: {}", e.getMessage());
             return false;
         }
+    }
+
+    public String getEmailFromToken(String token) {
+        Claims claims = Jwts.parserBuilder()
+                .setSigningKey(getSigningKey())
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+        return claims.getSubject();
     }
 }
