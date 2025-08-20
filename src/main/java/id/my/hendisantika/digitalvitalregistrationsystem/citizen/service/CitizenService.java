@@ -4,6 +4,7 @@ import id.my.hendisantika.digitalvitalregistrationsystem.certificate.repository.
 import id.my.hendisantika.digitalvitalregistrationsystem.citizen.dto.CitizenRequestDto;
 import id.my.hendisantika.digitalvitalregistrationsystem.citizen.dto.CitizenResponseDto;
 import id.my.hendisantika.digitalvitalregistrationsystem.citizen.enums.CitizenStatus;
+import id.my.hendisantika.digitalvitalregistrationsystem.citizen.enums.Gender;
 import id.my.hendisantika.digitalvitalregistrationsystem.citizen.mapper.CitizenDtoMapper;
 import id.my.hendisantika.digitalvitalregistrationsystem.citizen.model.Citizen;
 import id.my.hendisantika.digitalvitalregistrationsystem.citizen.repository.CitizenRepository;
@@ -116,5 +117,10 @@ public class CitizenService {
         } else {
             throw new RuntimeException("Citizen not found");
         }
+    }
+
+    //@Cacheable(value = "male")
+    public Long getMaleCount() {
+        return citizenRepository.countByGender(Gender.MALE);
     }
 }
