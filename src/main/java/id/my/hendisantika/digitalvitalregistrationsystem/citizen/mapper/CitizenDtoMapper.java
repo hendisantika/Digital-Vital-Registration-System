@@ -1,7 +1,11 @@
 package id.my.hendisantika.digitalvitalregistrationsystem.citizen.mapper;
 
+import id.my.hendisantika.digitalvitalregistrationsystem.citizen.dto.CitizenRequestDto;
 import id.my.hendisantika.digitalvitalregistrationsystem.citizen.dto.CitizenResponseDto;
+import id.my.hendisantika.digitalvitalregistrationsystem.citizen.enums.CitizenStatus;
 import id.my.hendisantika.digitalvitalregistrationsystem.citizen.model.Citizen;
+
+import java.time.LocalDate;
 
 /**
  * Created by IntelliJ IDEA.
@@ -42,6 +46,35 @@ public class CitizenDtoMapper {
                 .marriageStatus(citizen.getMarriageStatus())
                 .citizenshipNumber(citizen.getCitizenshipNumber())
                 .updatedAt(citizen.getUpdatedAt())
+                .build();
+    }
+
+    //save - create
+    public static Citizen mapToEntity(CitizenRequestDto dto) {
+        return Citizen.builder()
+                .firstName(dto.getFirstName())
+                .middleName(dto.getMiddleName())
+                .lastName(dto.getLastName())
+                .dateOfBirth(dto.getDateOfBirth())
+                .gender(dto.getGender())
+                .spouseName(dto.getSpouseName())
+                .fatherName(dto.getFatherName())
+                .motherName(dto.getMotherName())
+                .grandfatherName(dto.getGrandfatherName())
+                .grandmotherName(dto.getGrandmotherName())
+                .nationality(dto.getNationality())
+                .district(dto.getDistrict())
+                .wardNo(dto.getWardNo())
+                .municipality(dto.getMunicipality())
+                .tole(dto.getTole())
+                .phoneNo(dto.getPhoneNo())
+                .createdAt(LocalDate.now())
+                // .updatedAt(dto.getUpdatedAt())
+                .verifiedBy(dto.getVerifiedBy())
+                .verifiedDate(dto.getVerifiedDate())
+                .status(CitizenStatus.PENDING)
+                .marriageStatus(dto.getMarriageStatus())
+                .citizenshipNumber(dto.getCitizenshipNumber())
                 .build();
     }
 }
