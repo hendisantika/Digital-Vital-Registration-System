@@ -72,4 +72,8 @@ public class OTPService {
         }
         return false;
     }
+
+    private String normalizeEmail(String email) {
+        return email.trim().toLowerCase();
+    }
 }
