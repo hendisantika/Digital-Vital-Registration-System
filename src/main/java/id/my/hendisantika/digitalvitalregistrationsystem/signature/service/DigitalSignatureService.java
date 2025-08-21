@@ -31,4 +31,10 @@ public class DigitalSignatureService {
         BigInteger signature = SignatureUtils.sign(message.toByteArray(), signatureKeysService.getPrivateKey(), signatureKeysService.getModulus());
         return signature.toString();
     }
+
+    // New version: verify raw bytes
+    public boolean verifyCertificate(byte[] uploadedBytes, String signature) throws NoSuchAlgorithmException {
+        BigInteger sig = new BigInteger(signature);
+        return VerifyUtils.verifySignature(uploadedBytes, sig, signatureKeysService.getPublicKey(), signatureKeysService.getModulus());
+    }
 }
