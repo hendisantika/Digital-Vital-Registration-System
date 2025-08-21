@@ -2,9 +2,11 @@ package id.my.hendisantika.digitalvitalregistrationsystem.staff.controller;
 
 import id.my.hendisantika.digitalvitalregistrationsystem.staff.dto.StaffUserRequestDto;
 import id.my.hendisantika.digitalvitalregistrationsystem.staff.dto.StaffUserResponseDto;
+import id.my.hendisantika.digitalvitalregistrationsystem.staff.model.StaffUser;
 import id.my.hendisantika.digitalvitalregistrationsystem.staff.service.UserStaffService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,6 +33,12 @@ public class StaffUserController {
     @PostMapping("/super-admin")
     public ResponseEntity<StaffUserResponseDto> createSuperAdmin(@RequestBody StaffUserRequestDto dto) {
         StaffUserResponseDto response = userStaffService.createSuperAdmin(dto);
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/admin")
+    public ResponseEntity<StaffUserResponseDto> createStaff(@RequestBody StaffUserRequestDto dto, @AuthenticationPrincipal StaffUser staffUser) {
+        StaffUserResponseDto response = userStaffService.createStaff(dto, staffUser);
         return ResponseEntity.ok(response);
     }
 }
