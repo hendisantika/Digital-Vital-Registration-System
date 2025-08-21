@@ -1,9 +1,17 @@
 package id.my.hendisantika.digitalvitalregistrationsystem.staff.mapper;
 
+import id.my.hendisantika.digitalvitalregistrationsystem.jwt.utils.JwtUtil;
+import id.my.hendisantika.digitalvitalregistrationsystem.staff.dto.StaffUserRequestDto;
 import id.my.hendisantika.digitalvitalregistrationsystem.staff.dto.StaffUserResponseDto;
+import id.my.hendisantika.digitalvitalregistrationsystem.staff.enums.Role;
+import id.my.hendisantika.digitalvitalregistrationsystem.staff.enums.Status;
 import id.my.hendisantika.digitalvitalregistrationsystem.staff.model.StaffUser;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
+
+import java.time.LocalDateTime;
 
 /**
  * Created by IntelliJ IDEA.
@@ -34,5 +42,39 @@ public class StaffUserDtoMapper {
                 .municipality(staffUser.getMunicipality())
                 .district(staffUser.getDistrict())
                 .build();
+    }
+
+    public static StaffUser toEntityDto(StaffUserRequestDto staffUserRequestDto, StaffUser addedBy, BCryptPasswordEncoder passwordEncoder, JwtUtil jwtUtil) {
+        StaffUser savedStaff = StaffUser.builder()
+                .fullName(staffUserRequestDto.getFullName())
+                .email(staffUserRequestDto.getEmail())
+                .password(passwordEncoder.encode(staffUserRequestDto.getPassword()))
+                .department(staffUserRequestDto.getDepartment())
+                .designation(staffUserRequestDto.getDesignation())
+                .phoneNumber(staffUserRequestDto.getPhoneNumber())
+                .role(staffUserRequestDto.getRole() != null ? staffUserRequestDto.getRole() : Role.ADMIN)
+                .createdAt(LocalDateTime.now())
+                .status(Status.ACTIVE)
+                .addedBy(staffUserRequestDto.getAddedBy())
+
+                .municipality(staffUserRequestDto.getMunicipality())
+                .district(staffUserRequestDto.getDistrict())
+
+                .build();
+
+
+        User user = User.builder()
+                .email(savedStaff.getEmail())
+                .password(savedStaff.getPassword())
+                .role(savedStaff.getRole())
+                .staffUser(savedStaff)
+                .createdAt(LocalDateTime.now())
+                .jwtToken(jwtUtil.generateToken(savedStaff.getEmail()))
+
+                .build();
+        savedStaff.setUser(user);
+        return savedStaff;
+
+
     }
 }
