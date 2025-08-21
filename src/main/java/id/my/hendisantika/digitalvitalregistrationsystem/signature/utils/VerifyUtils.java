@@ -25,4 +25,12 @@ public class VerifyUtils {
         BigInteger decryptedSignature = signature.modPow(publicKey, modulus);
         return hashed.equals(decryptedSignature);
     }
+
+    public static boolean verifySignature(String message, BigInteger signature, BigInteger publicKey, BigInteger modulus) throws NoSuchAlgorithmException {
+        byte[] hash = SignatureUtils.sha256(message);
+        BigInteger hashed = new BigInteger(1, hash);
+
+        BigInteger decryptedSignature = signature.modPow(publicKey, modulus);
+        return hashed.equals(decryptedSignature);
+    }
 }
