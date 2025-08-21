@@ -2,6 +2,7 @@ package id.my.hendisantika.digitalvitalregistrationsystem.signature.utils;
 
 import org.springframework.stereotype.Service;
 
+import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -25,5 +26,12 @@ public class SignatureUtils {
 
     public static byte[] sha256(String input) throws NoSuchAlgorithmException {
         return sha256(input.getBytes());
+    }
+
+    // For signing text messages
+    public static BigInteger sign(String message, BigInteger privateKey, BigInteger modulus) throws NoSuchAlgorithmException {
+        byte[] hash = sha256(message);
+        BigInteger hashed = new BigInteger(1, hash);
+        return hashed.modPow(privateKey, modulus);
     }
 }
