@@ -1,5 +1,7 @@
 package id.my.hendisantika.digitalvitalregistrationsystem.staff.mapper;
 
+import id.my.hendisantika.digitalvitalregistrationsystem.staff.dto.StaffUserResponseDto;
+import id.my.hendisantika.digitalvitalregistrationsystem.staff.model.StaffUser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -17,4 +19,20 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class StaffUserDtoMapper {
+    public static StaffUserResponseDto staffUserResponseDto(StaffUser staffUser) {
+        return StaffUserResponseDto.builder()
+                .id(staffUser.getId())
+                .fullName(staffUser.getFullName())
+                .email(staffUser.getEmail())
+                .role(staffUser.getRole())
+                .status(staffUser.getStatus())
+                .department(staffUser.getDepartment())
+                .designation(staffUser.getDesignation())
+                .phoneNumber(staffUser.getPhoneNumber())
+                .createdAt(staffUser.getCreatedAt())
+                .addedBy(staffUser.getAddedBy())
+                .municipality(staffUser.getMunicipality())
+                .district(staffUser.getDistrict())
+                .build();
+    }
 }
