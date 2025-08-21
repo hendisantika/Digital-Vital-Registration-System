@@ -56,4 +56,9 @@ public class SignatureKeysService {
     public BigInteger getModulus() {
         return new BigInteger(getLatestKeys().getModulus());
     }
+
+    @Cacheable(value = "privateKey")
+    public BigInteger getPrivateKey() {
+        return new BigInteger(getLatestKeys().getPrivateKey());
+    }
 }
