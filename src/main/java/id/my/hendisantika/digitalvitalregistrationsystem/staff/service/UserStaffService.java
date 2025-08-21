@@ -91,4 +91,12 @@ public class UserStaffService {
         List<StaffUser> adminStaff = staffUserRepository.findByRole(role);
         return adminStaff.stream().map(StaffUserDtoMapper::staffUserResponseDto).collect(Collectors.toList());
     }
+
+    public void updateStatus(Long id, Status status) {
+        StaffUser staff = staffUserRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Staff not found"));
+        staff.setStatus(status);
+        staffUserRepository.save(staff);
+    }
+
 }
