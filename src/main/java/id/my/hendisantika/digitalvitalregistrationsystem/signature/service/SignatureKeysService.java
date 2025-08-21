@@ -1,6 +1,9 @@
 package id.my.hendisantika.digitalvitalregistrationsystem.signature.service;
 
+import id.my.hendisantika.digitalvitalregistrationsystem.signature.KeyGenerator.RSAKeyGenerator;
+import id.my.hendisantika.digitalvitalregistrationsystem.signature.model.SignatureKeys;
 import id.my.hendisantika.digitalvitalregistrationsystem.signature.repository.SignatureKeysRepository;
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,4 +25,18 @@ import org.springframework.stereotype.Service;
 public class SignatureKeysService {
     private static final Logger LOG = LoggerFactory.getLogger(SignatureKeysService.class);
     private final SignatureKeysRepository signatureKeysRepository;
+
+    @PostConstruct
+    public void generateAndStoreKeysIfNotExists() {
+        if (signatureKeysRepository.count() == 0) {
+            RSAKeyGenerator rsa = new RSAKeyGenerator(2048);
+            SignatureKeys keys = SignatureKeys.builder()
+                    .privateKey(rsa.getPrivateKey())
+                    .publicKey(rsa.getPublicKey())
+                    .modulus(rsa.getModulus())
+                    .build();
+            signatureKeysRepository.save(keys);
+
+        }
+    }
 }
