@@ -23,4 +23,9 @@ public class OtpController {
 
     private final WhatsappService whatsappService;
 
+    // Validate Nepal phone number
+    public boolean isValidNepalPhoneNumber(String number) {
+        return number != null && number.matches("^\\+9779[78]\\d{8}$");
+    }
+
 }
