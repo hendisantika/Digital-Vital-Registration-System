@@ -33,4 +33,10 @@ public class VerifyUtils {
         BigInteger decryptedSignature = signature.modPow(publicKey, modulus);
         return hashed.equals(decryptedSignature);
     }
+
+    // Optional: directly verify a BigInteger message (e.g., already hashed)
+    public static boolean verifySignature(BigInteger messageHash, BigInteger signature, BigInteger publicKey, BigInteger modulus) {
+        BigInteger decryptedSignature = signature.modPow(publicKey, modulus);
+        return messageHash.equals(decryptedSignature);
+    }
 }
