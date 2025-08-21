@@ -1,11 +1,10 @@
 package id.my.hendisantika.digitalvitalregistrationsystem.kafka.producer;
 
+import id.my.hendisantika.digitalvitalregistrationsystem.notification.model.Notification;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
-
-import javax.management.Notification;
 
 /**
  * Created by IntelliJ IDEA.
