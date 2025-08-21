@@ -2,6 +2,9 @@ package id.my.hendisantika.digitalvitalregistrationsystem.signature.utils;
 
 import org.springframework.stereotype.Service;
 
+import java.math.BigInteger;
+import java.security.NoSuchAlgorithmException;
+
 /**
  * Created by IntelliJ IDEA.
  * Project : Digital-Vital-Registration-System
@@ -15,4 +18,11 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class VerifyUtils {
+    public static boolean verifySignature(byte[] data, BigInteger signature, BigInteger publicKey, BigInteger modulus) throws NoSuchAlgorithmException {
+        byte[] hash = SignatureUtils.sha256(data);
+        BigInteger hashed = new BigInteger(1, hash);
+
+        BigInteger decryptedSignature = signature.modPow(publicKey, modulus);
+        return hashed.equals(decryptedSignature);
+    }
 }
