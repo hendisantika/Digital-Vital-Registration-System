@@ -74,4 +74,14 @@ public class UserStaffService {
 
         return StaffUserDtoMapper.staffUserResponseDto(savedStaff);
     }
+
+    public StaffUserResponseDto createStaff(StaffUserRequestDto staffUserRequestDto, StaffUser addedBy) {
+        if (staffUserRepository.existsByEmail(staffUserRequestDto.getEmail())) {
+            throw new RuntimeException("Email already exists.");
+        }
+        StaffUser staffUser = StaffUserDtoMapper.toEntityDto(staffUserRequestDto, addedBy, passwordEncoder, jwtUtil);
+        StaffUser savedStaff = staffUserRepository.save(staffUser);
+
+        return StaffUserDtoMapper.staffUserResponseDto(savedStaff);
+    }
 }
