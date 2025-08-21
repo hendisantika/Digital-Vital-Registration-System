@@ -34,4 +34,11 @@ public class SignatureUtils {
         BigInteger hashed = new BigInteger(1, hash);
         return hashed.modPow(privateKey, modulus);
     }
+
+    //  For signing raw byte data like PDFs
+    public static BigInteger sign(byte[] data, BigInteger privateKey, BigInteger modulus) throws NoSuchAlgorithmException {
+        byte[] hash = sha256(data);
+        BigInteger hashed = new BigInteger(1, hash);
+        return hashed.modPow(privateKey, modulus);
+    }
 }
