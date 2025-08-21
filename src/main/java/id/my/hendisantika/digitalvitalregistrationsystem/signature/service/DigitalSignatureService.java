@@ -37,4 +37,12 @@ public class DigitalSignatureService {
         BigInteger sig = new BigInteger(signature);
         return VerifyUtils.verifySignature(uploadedBytes, sig, signatureKeysService.getPublicKey(), signatureKeysService.getModulus());
     }
+
+    public DigitalSignatureService(SignatureKeysService signatureKeysService) {
+        this.signatureKeysService = signatureKeysService;
+        LOG.info("\n Private Keys: {}, \nPublic: {}, \nModulus: {}",
+                signatureKeysService.getPrivateKey(),
+                signatureKeysService.getPublicKey(),
+                signatureKeysService.getModulus());
+    }
 }
