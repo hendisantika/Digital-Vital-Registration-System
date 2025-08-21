@@ -36,7 +36,11 @@ public class SignatureKeysService {
                     .modulus(rsa.getModulus())
                     .build();
             signatureKeysRepository.save(keys);
-
         }
+    }
+
+    private SignatureKeys getLatestKeys() {
+        return signatureKeysRepository.findTopByOrderByIdDesc()
+                .orElseThrow(() -> new RuntimeException("No signature keys found"));
     }
 }
