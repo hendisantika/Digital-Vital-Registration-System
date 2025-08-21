@@ -4,6 +4,7 @@ import id.my.hendisantika.digitalvitalregistrationsystem.staff.dto.StaffUserRequ
 import id.my.hendisantika.digitalvitalregistrationsystem.staff.dto.StaffUserResponseDto;
 import id.my.hendisantika.digitalvitalregistrationsystem.staff.enums.Role;
 import id.my.hendisantika.digitalvitalregistrationsystem.staff.enums.Status;
+import id.my.hendisantika.digitalvitalregistrationsystem.staff.mapper.StaffUserDtoMapper;
 import id.my.hendisantika.digitalvitalregistrationsystem.staff.model.StaffUser;
 import id.my.hendisantika.digitalvitalregistrationsystem.staff.service.UserStaffService;
 import lombok.RequiredArgsConstructor;
@@ -59,5 +60,12 @@ public class StaffUserController {
     public ResponseEntity<?> updateStatus(@PathVariable Long id, @RequestParam Status status) {
         userStaffService.updateStatus(id, status);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/by-email")
+    public ResponseEntity<StaffUserResponseDto> getStaffByEmail(@RequestParam("email") String email) {
+        StaffUser staffUser = userStaffService.getStaffByEmail(email).orElseThrow(() -> new RuntimeException("Email not found"));
+        StaffUserResponseDto responseStaff = StaffUserDtoMapper.staffUserResponseDto(staffUser);
+        return ResponseEntity.ok(responseStaff);
     }
 }
