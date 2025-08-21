@@ -2,6 +2,9 @@ package id.my.hendisantika.digitalvitalregistrationsystem.signature.utils;
 
 import org.springframework.stereotype.Service;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
 /**
  * Created by IntelliJ IDEA.
  * Project : Digital-Vital-Registration-System
@@ -15,4 +18,8 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class SignatureUtils {
+    public static byte[] sha256(byte[] input) throws NoSuchAlgorithmException {
+        MessageDigest md = MessageDigest.getInstance("SHA-256");
+        return md.digest(input);
+    }
 }
