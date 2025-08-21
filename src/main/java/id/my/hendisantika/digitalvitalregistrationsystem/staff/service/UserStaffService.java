@@ -14,6 +14,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by IntelliJ IDEA.
@@ -83,5 +85,10 @@ public class UserStaffService {
         StaffUser savedStaff = staffUserRepository.save(staffUser);
 
         return StaffUserDtoMapper.staffUserResponseDto(savedStaff);
+    }
+
+    public List<StaffUserResponseDto> getStaffByRole(Role role) {
+        List<StaffUser> adminStaff = staffUserRepository.findByRole(role);
+        return adminStaff.stream().map(StaffUserDtoMapper::staffUserResponseDto).collect(Collectors.toList());
     }
 }
