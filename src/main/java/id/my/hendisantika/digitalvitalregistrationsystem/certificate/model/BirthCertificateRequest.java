@@ -3,9 +3,13 @@ package id.my.hendisantika.digitalvitalregistrationsystem.certificate.model;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import id.my.hendisantika.digitalvitalregistrationsystem.certificate.certificateFile.CertificateFile;
+import id.my.hendisantika.digitalvitalregistrationsystem.certificate.enums.CertificateStatus;
+import id.my.hendisantika.digitalvitalregistrationsystem.citizen.model.Citizen;
+import id.my.hendisantika.digitalvitalregistrationsystem.staff.model.StaffUser;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -16,8 +20,10 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -41,7 +47,6 @@ import java.time.LocalDate;
                 columnNames = {"child_name", "date_of_birth", "citizen_id"}
         )
 )
-
 @Data
 @Builder
 @NoArgsConstructor

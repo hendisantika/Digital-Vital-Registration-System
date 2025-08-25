@@ -4,6 +4,8 @@ import id.my.hendisantika.digitalvitalregistrationsystem.certificate.certificate
 import id.my.hendisantika.digitalvitalregistrationsystem.certificate.enums.CertificateStatus;
 import id.my.hendisantika.digitalvitalregistrationsystem.certificate.model.DeathCertificateRequest;
 import id.my.hendisantika.digitalvitalregistrationsystem.certificate.repository.DeathCertificateRepository;
+import id.my.hendisantika.digitalvitalregistrationsystem.citizen.model.Citizen;
+import id.my.hendisantika.digitalvitalregistrationsystem.citizen.repository.CitizenRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;

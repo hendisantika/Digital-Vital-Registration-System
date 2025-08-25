@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import id.my.hendisantika.digitalvitalregistrationsystem.certificate.certificateFile.CertificateFile;
 import id.my.hendisantika.digitalvitalregistrationsystem.certificate.enums.CertificateStatus;
 import id.my.hendisantika.digitalvitalregistrationsystem.citizen.model.Citizen;
+import id.my.hendisantika.digitalvitalregistrationsystem.staff.model.StaffUser;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

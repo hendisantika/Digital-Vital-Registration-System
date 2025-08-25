@@ -1,6 +1,7 @@
 package id.my.hendisantika.digitalvitalregistrationsystem.certificate.repository;
 
 import id.my.hendisantika.digitalvitalregistrationsystem.certificate.model.DeathCertificateRequest;
+import id.my.hendisantika.digitalvitalregistrationsystem.citizen.model.Citizen;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

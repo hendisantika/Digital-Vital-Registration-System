@@ -2,6 +2,7 @@ package id.my.hendisantika.digitalvitalregistrationsystem.dashboard;
 
 import id.my.hendisantika.digitalvitalregistrationsystem.certificate.service.BirthCertificateService;
 import id.my.hendisantika.digitalvitalregistrationsystem.certificate.service.DeathCertificateRequestService;
+import id.my.hendisantika.digitalvitalregistrationsystem.marriage.service.MarriageCertificateRequestService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

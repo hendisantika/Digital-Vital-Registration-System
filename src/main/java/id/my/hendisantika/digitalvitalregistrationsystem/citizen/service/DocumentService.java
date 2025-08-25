@@ -10,6 +10,7 @@ import id.my.hendisantika.digitalvitalregistrationsystem.citizen.model.Citizen;
 import id.my.hendisantika.digitalvitalregistrationsystem.citizen.model.CitizenDocument;
 import id.my.hendisantika.digitalvitalregistrationsystem.citizen.repository.CitizenDocumentRepository;
 import id.my.hendisantika.digitalvitalregistrationsystem.citizen.repository.CitizenRepository;
+import id.my.hendisantika.digitalvitalregistrationsystem.notification.service.NotificationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

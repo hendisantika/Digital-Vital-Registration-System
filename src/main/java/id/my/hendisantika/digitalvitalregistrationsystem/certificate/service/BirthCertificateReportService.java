@@ -5,6 +5,8 @@ import id.my.hendisantika.digitalvitalregistrationsystem.certificate.enums.Certi
 import id.my.hendisantika.digitalvitalregistrationsystem.certificate.enums.CertificateType;
 import id.my.hendisantika.digitalvitalregistrationsystem.certificate.model.BirthCertificateRequest;
 import id.my.hendisantika.digitalvitalregistrationsystem.certificate.repository.CertificateFileRepository;
+import id.my.hendisantika.digitalvitalregistrationsystem.citizen.model.Citizen;
+import id.my.hendisantika.digitalvitalregistrationsystem.signature.service.SignatureKeysService;
 import lombok.RequiredArgsConstructor;
 import net.sf.jasperreports.engine.JREmptyDataSource;
 import net.sf.jasperreports.engine.JasperCompileManager;

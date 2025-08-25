@@ -18,6 +18,7 @@ import id.my.hendisantika.digitalvitalregistrationsystem.marriage.model.ForeignP
 import id.my.hendisantika.digitalvitalregistrationsystem.marriage.model.MarriageCertificateRequest;
 import id.my.hendisantika.digitalvitalregistrationsystem.marriage.repository.ForeignPersonRepository;
 import id.my.hendisantika.digitalvitalregistrationsystem.marriage.repository.MarriageCertificateRequestRepository;
+import id.my.hendisantika.digitalvitalregistrationsystem.notification.service.NotificationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

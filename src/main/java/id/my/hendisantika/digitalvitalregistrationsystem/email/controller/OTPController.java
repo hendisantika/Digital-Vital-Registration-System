@@ -1,6 +1,7 @@
 package id.my.hendisantika.digitalvitalregistrationsystem.email.controller;
 
 import id.my.hendisantika.digitalvitalregistrationsystem.email.service.OTPService;
+import id.my.hendisantika.digitalvitalregistrationsystem.jwt.utils.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;

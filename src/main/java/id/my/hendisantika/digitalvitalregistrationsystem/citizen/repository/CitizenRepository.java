@@ -1,5 +1,7 @@
 package id.my.hendisantika.digitalvitalregistrationsystem.citizen.repository;
 
+import id.my.hendisantika.digitalvitalregistrationsystem.citizen.dto.CitizenResponseDto;
+import id.my.hendisantika.digitalvitalregistrationsystem.citizen.enums.Gender;
 import id.my.hendisantika.digitalvitalregistrationsystem.citizen.model.Citizen;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -8,6 +10,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 /**

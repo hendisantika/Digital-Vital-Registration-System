@@ -3,6 +3,13 @@ package id.my.hendisantika.digitalvitalregistrationsystem.certificate.certificat
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import id.my.hendisantika.digitalvitalregistrationsystem.certificate.enums.CertificateStatus;
+import id.my.hendisantika.digitalvitalregistrationsystem.certificate.enums.CertificateType;
+import id.my.hendisantika.digitalvitalregistrationsystem.certificate.model.BirthCertificateRequest;
+import id.my.hendisantika.digitalvitalregistrationsystem.certificate.model.DeathCertificateRequest;
+import id.my.hendisantika.digitalvitalregistrationsystem.citizen.model.Citizen;
+import id.my.hendisantika.digitalvitalregistrationsystem.marriage.model.MarriageCertificateRequest;
+import id.my.hendisantika.digitalvitalregistrationsystem.notification.model.Notification;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -20,9 +27,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import org.bouncycastle.oer.its.CertificateType;
 
-import javax.management.Notification;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -58,18 +63,15 @@ public class CertificateFile implements Serializable {
     @JoinColumn(name = "birth_certificate_request_id", referencedColumnName = "id", nullable = true)
     private BirthCertificateRequest birthCertificateRequest;
 
-
     @JsonBackReference(value = "certificate-file-marriage-request")
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "marriage_certificate_request_id")
     private MarriageCertificateRequest marriageCertificateRequest;
 
-
     @JsonBackReference(value = "certificate-file-citizen")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "citizen_id", referencedColumnName = "id", nullable = false)
     private Citizen citizen;
-
 
     private Long verifiedBy;
     private LocalDate verifiedAt;

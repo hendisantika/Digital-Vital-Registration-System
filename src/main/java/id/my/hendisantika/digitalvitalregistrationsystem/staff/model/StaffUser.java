@@ -1,9 +1,12 @@
 package id.my.hendisantika.digitalvitalregistrationsystem.staff.model;
 
-import ch.qos.logback.core.status.Status;
 import id.my.hendisantika.digitalvitalregistrationsystem.certificate.model.BirthCertificateRequest;
 import id.my.hendisantika.digitalvitalregistrationsystem.certificate.model.DeathCertificateRequest;
 import id.my.hendisantika.digitalvitalregistrationsystem.marriage.model.MarriageCertificateRequest;
+import id.my.hendisantika.digitalvitalregistrationsystem.staff.enums.Department;
+import id.my.hendisantika.digitalvitalregistrationsystem.staff.enums.Role;
+import id.my.hendisantika.digitalvitalregistrationsystem.staff.enums.Status;
+import id.my.hendisantika.digitalvitalregistrationsystem.user.model.User;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -19,9 +22,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.security.core.userdetails.User;
 
-import javax.management.relation.Role;
 import java.time.LocalDateTime;
 import java.util.List;
 

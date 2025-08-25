@@ -1,5 +1,6 @@
 package id.my.hendisantika.digitalvitalregistrationsystem.jwt.utils;
 
+import id.my.hendisantika.digitalvitalregistrationsystem.user.repository.UserRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;

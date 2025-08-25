@@ -5,6 +5,11 @@ import id.my.hendisantika.digitalvitalregistrationsystem.certificate.enums.Certi
 import id.my.hendisantika.digitalvitalregistrationsystem.certificate.model.BirthCertificateRequest;
 import id.my.hendisantika.digitalvitalregistrationsystem.certificate.repository.BirthCertificateRepository;
 import id.my.hendisantika.digitalvitalregistrationsystem.certificate.repository.CertificateFileRepository;
+import id.my.hendisantika.digitalvitalregistrationsystem.citizen.model.Citizen;
+import id.my.hendisantika.digitalvitalregistrationsystem.citizen.repository.CitizenRepository;
+import id.my.hendisantika.digitalvitalregistrationsystem.email.service.EmailService;
+import id.my.hendisantika.digitalvitalregistrationsystem.notification.enums.NotificationType;
+import id.my.hendisantika.digitalvitalregistrationsystem.notification.service.NotificationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;

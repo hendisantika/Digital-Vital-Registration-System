@@ -8,8 +8,9 @@ import id.my.hendisantika.digitalvitalregistrationsystem.staff.enums.Status;
 import id.my.hendisantika.digitalvitalregistrationsystem.staff.mapper.StaffUserDtoMapper;
 import id.my.hendisantika.digitalvitalregistrationsystem.staff.model.StaffUser;
 import id.my.hendisantika.digitalvitalregistrationsystem.staff.repository.StaffUserRepository;
+import id.my.hendisantika.digitalvitalregistrationsystem.user.model.User;
+import id.my.hendisantika.digitalvitalregistrationsystem.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
