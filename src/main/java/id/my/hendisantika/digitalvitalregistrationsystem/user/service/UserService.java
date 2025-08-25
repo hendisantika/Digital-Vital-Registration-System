@@ -1,6 +1,7 @@
 package id.my.hendisantika.digitalvitalregistrationsystem.user.service;
 
 import id.my.hendisantika.digitalvitalregistrationsystem.jwt.utils.JwtUtil;
+import id.my.hendisantika.digitalvitalregistrationsystem.staff.enums.Status;
 import id.my.hendisantika.digitalvitalregistrationsystem.user.dto.UserRequestDto;
 import id.my.hendisantika.digitalvitalregistrationsystem.user.dto.UserResponseDto;
 import id.my.hendisantika.digitalvitalregistrationsystem.user.mapper.UserMapper;
@@ -53,4 +54,28 @@ public class UserService {
         userRepository.save(user);
         return userMapper.toDto(user);
     }*/
+
+    public UserResponseDto loginUser(UserRequestDto userRequestDto) {
+        User user = userRepository.findByEmail(userRequestDto.getEmail())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        // ✅ Check password match
+        if (!passwordEncoder.matches(userRequestDto.getPassword(), user.getPassword())) {
+            throw new RuntimeException("Wrong password");
+        }
+
+        // ✅ Check if it's a staff account and status is ACTIVE
+        if (user.getStaffUser() != null) {
+            if (user.getStaffUser().getStatus() != Status.ACTIVE) {
+                throw new RuntimeException("Your account is inactive. Please contact the system administrator.");
+            }
+        }
+
+        // ✅ Generate new JWT token
+        String token = jwtUtil.generateToken(user.getEmail());
+        user.setJwtToken(token);
+        userRepository.save(user);
+
+        return userMapper.toDto(user);
+    }
 }
