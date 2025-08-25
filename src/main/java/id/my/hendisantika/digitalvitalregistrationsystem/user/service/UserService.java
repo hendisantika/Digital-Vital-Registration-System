@@ -78,4 +78,8 @@ public class UserService {
 
         return userMapper.toDto(user);
     }
+
+    public boolean existsByEmail(String email) {
+        return userRepository.existsByEmail(email);
+    }
 }
