@@ -7,6 +7,7 @@ import id.my.hendisantika.digitalvitalregistrationsystem.certificate.model.Death
 import id.my.hendisantika.digitalvitalregistrationsystem.certificate.repository.CertificateFileRepository;
 import id.my.hendisantika.digitalvitalregistrationsystem.citizen.model.Citizen;
 import id.my.hendisantika.digitalvitalregistrationsystem.signature.service.SignatureKeysService;
+import id.my.hendisantika.digitalvitalregistrationsystem.signature.utils.SignatureUtils;
 import lombok.RequiredArgsConstructor;
 import net.sf.jasperreports.engine.JREmptyDataSource;
 import net.sf.jasperreports.engine.JasperCompileManager;
@@ -14,7 +15,6 @@ import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
-import org.aspectj.weaver.SignatureUtils;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

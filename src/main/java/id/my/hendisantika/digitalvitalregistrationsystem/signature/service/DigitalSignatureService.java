@@ -1,6 +1,7 @@
 package id.my.hendisantika.digitalvitalregistrationsystem.signature.service;
 
-import org.aspectj.weaver.SignatureUtils;
+import id.my.hendisantika.digitalvitalregistrationsystem.signature.utils.SignatureUtils;
+import id.my.hendisantika.digitalvitalregistrationsystem.signature.utils.VerifyUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;

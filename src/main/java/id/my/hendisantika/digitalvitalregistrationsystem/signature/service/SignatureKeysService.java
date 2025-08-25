@@ -34,9 +34,9 @@ public class SignatureKeysService {
         if (signatureKeysRepository.count() == 0) {
             RSAKeyGenerator rsa = new RSAKeyGenerator(2048);
             SignatureKeys keys = SignatureKeys.builder()
-                    .privateKey(rsa.getPrivateKey())
-                    .publicKey(rsa.getPublicKey())
-                    .modulus(rsa.getModulus())
+                    .privateKey(rsa.getPrivateKey().toString())
+                    .publicKey(rsa.getPublicKey().toString())
+                    .modulus(rsa.getModulus().toString())
                     .build();
             signatureKeysRepository.save(keys);
         }

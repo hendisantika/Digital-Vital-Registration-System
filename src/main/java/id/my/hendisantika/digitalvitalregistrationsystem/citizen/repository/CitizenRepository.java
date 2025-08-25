@@ -3,10 +3,10 @@ package id.my.hendisantika.digitalvitalregistrationsystem.citizen.repository;
 import id.my.hendisantika.digitalvitalregistrationsystem.citizen.dto.CitizenResponseDto;
 import id.my.hendisantika.digitalvitalregistrationsystem.citizen.enums.Gender;
 import id.my.hendisantika.digitalvitalregistrationsystem.citizen.model.Citizen;
+import id.my.hendisantika.digitalvitalregistrationsystem.user.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;

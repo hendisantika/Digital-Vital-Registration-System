@@ -18,13 +18,16 @@ import id.my.hendisantika.digitalvitalregistrationsystem.marriage.model.ForeignP
 import id.my.hendisantika.digitalvitalregistrationsystem.marriage.model.MarriageCertificateRequest;
 import id.my.hendisantika.digitalvitalregistrationsystem.marriage.repository.ForeignPersonRepository;
 import id.my.hendisantika.digitalvitalregistrationsystem.marriage.repository.MarriageCertificateRequestRepository;
+import id.my.hendisantika.digitalvitalregistrationsystem.notification.enums.DeliveryChannel;
+import id.my.hendisantika.digitalvitalregistrationsystem.notification.enums.NotificationEvent;
+import id.my.hendisantika.digitalvitalregistrationsystem.notification.enums.NotificationType;
+import id.my.hendisantika.digitalvitalregistrationsystem.notification.model.Notification;
 import id.my.hendisantika.digitalvitalregistrationsystem.notification.service.NotificationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.management.Notification;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;

@@ -6,8 +6,8 @@ import id.my.hendisantika.digitalvitalregistrationsystem.staff.dto.StaffUserResp
 import id.my.hendisantika.digitalvitalregistrationsystem.staff.enums.Role;
 import id.my.hendisantika.digitalvitalregistrationsystem.staff.enums.Status;
 import id.my.hendisantika.digitalvitalregistrationsystem.staff.model.StaffUser;
+import id.my.hendisantika.digitalvitalregistrationsystem.user.model.User;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -70,7 +70,6 @@ public class StaffUserDtoMapper {
                 .staffUser(savedStaff)
                 .createdAt(LocalDateTime.now())
                 .jwtToken(jwtUtil.generateToken(savedStaff.getEmail()))
-
                 .build();
         savedStaff.setUser(user);
         return savedStaff;

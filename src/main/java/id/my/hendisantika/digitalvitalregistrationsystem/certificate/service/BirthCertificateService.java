@@ -8,7 +8,10 @@ import id.my.hendisantika.digitalvitalregistrationsystem.certificate.repository.
 import id.my.hendisantika.digitalvitalregistrationsystem.citizen.model.Citizen;
 import id.my.hendisantika.digitalvitalregistrationsystem.citizen.repository.CitizenRepository;
 import id.my.hendisantika.digitalvitalregistrationsystem.email.service.EmailService;
+import id.my.hendisantika.digitalvitalregistrationsystem.notification.enums.DeliveryChannel;
+import id.my.hendisantika.digitalvitalregistrationsystem.notification.enums.NotificationEvent;
 import id.my.hendisantika.digitalvitalregistrationsystem.notification.enums.NotificationType;
+import id.my.hendisantika.digitalvitalregistrationsystem.notification.model.Notification;
 import id.my.hendisantika.digitalvitalregistrationsystem.notification.service.NotificationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,7 +19,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import javax.management.Notification;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashMap;

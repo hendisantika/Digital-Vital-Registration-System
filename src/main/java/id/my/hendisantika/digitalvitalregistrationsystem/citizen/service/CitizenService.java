@@ -10,18 +10,21 @@ import id.my.hendisantika.digitalvitalregistrationsystem.citizen.mapper.CitizenD
 import id.my.hendisantika.digitalvitalregistrationsystem.citizen.model.Citizen;
 import id.my.hendisantika.digitalvitalregistrationsystem.citizen.repository.CitizenRepository;
 import id.my.hendisantika.digitalvitalregistrationsystem.jwt.utils.JwtUtil;
+import id.my.hendisantika.digitalvitalregistrationsystem.notification.enums.DeliveryChannel;
+import id.my.hendisantika.digitalvitalregistrationsystem.notification.enums.NotificationEvent;
+import id.my.hendisantika.digitalvitalregistrationsystem.notification.enums.NotificationType;
+import id.my.hendisantika.digitalvitalregistrationsystem.notification.model.Notification;
 import id.my.hendisantika.digitalvitalregistrationsystem.notification.service.NotificationService;
+import id.my.hendisantika.digitalvitalregistrationsystem.user.model.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.management.Notification;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;

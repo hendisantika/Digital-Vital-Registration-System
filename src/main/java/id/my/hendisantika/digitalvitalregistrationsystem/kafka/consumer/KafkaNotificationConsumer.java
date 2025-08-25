@@ -3,13 +3,14 @@ package id.my.hendisantika.digitalvitalregistrationsystem.kafka.consumer;
 import id.my.hendisantika.digitalvitalregistrationsystem.certificate.certificateFile.CertificateFile;
 import id.my.hendisantika.digitalvitalregistrationsystem.certificate.repository.CertificateFileRepository;
 import id.my.hendisantika.digitalvitalregistrationsystem.email.service.EmailService;
+import id.my.hendisantika.digitalvitalregistrationsystem.notification.enums.NotificationStatus;
+import id.my.hendisantika.digitalvitalregistrationsystem.notification.model.Notification;
 import id.my.hendisantika.digitalvitalregistrationsystem.notification.repository.NotificationRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
-import javax.management.Notification;
 import java.time.LocalDateTime;
 
 /**

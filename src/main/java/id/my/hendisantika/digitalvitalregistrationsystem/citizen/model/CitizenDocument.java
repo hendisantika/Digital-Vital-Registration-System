@@ -3,6 +3,7 @@ package id.my.hendisantika.digitalvitalregistrationsystem.citizen.model;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import id.my.hendisantika.digitalvitalregistrationsystem.certificate.model.DeathCertificateRequest;
+import id.my.hendisantika.digitalvitalregistrationsystem.citizen.enums.DocumentType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -19,7 +20,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import org.w3c.dom.DocumentType;
 
 import java.io.Serializable;
 import java.time.LocalDate;
