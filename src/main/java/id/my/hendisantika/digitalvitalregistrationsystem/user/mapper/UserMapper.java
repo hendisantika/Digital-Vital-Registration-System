@@ -2,6 +2,7 @@ package id.my.hendisantika.digitalvitalregistrationsystem.user.mapper;
 
 import id.my.hendisantika.digitalvitalregistrationsystem.staff.enums.Role;
 import id.my.hendisantika.digitalvitalregistrationsystem.user.dto.UserRequestDto;
+import id.my.hendisantika.digitalvitalregistrationsystem.user.dto.UserResponseDto;
 import id.my.hendisantika.digitalvitalregistrationsystem.user.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -33,6 +34,19 @@ public class UserMapper {
                 .password(passwordEncoder.encode(userRequestDto.getPassword()))
                 .role(userRequestDto.getRole() != null ? userRequestDto.getRole() : Role.CITIZEN) // set from DTO or default
                 .createdAt(LocalDateTime.now())
+                .build();
+    }
+
+    // Converts saved User entity to response DTO for client
+    public UserResponseDto toDto(User user) {
+        return UserResponseDto.builder()
+                .id(user.getId())
+                .email(user.getEmail())
+                .jwtToken(user.getJwtToken())
+                .role(user.getRole())
+                .createdAt(user.getCreatedAt())
+                .department(user.getStaffUser() != null ? user.getStaffUser().getDepartment().name() : null)
+                .municipality(user.getStaffUser() != null ? user.getStaffUser().getMunicipality() : null)
                 .build();
     }
 }
