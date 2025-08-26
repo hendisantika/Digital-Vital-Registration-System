@@ -51,7 +51,7 @@ class FullStackIntegrationTest {
             .withExposedPorts(6379);
 
     @Container
-    static KafkaContainer kafka = new KafkaContainer(DockerImageName.parse("confluentinc/cp-kafka:latest"));
+    static KafkaContainer kafka = new KafkaContainer(DockerImageName.parse("confluentinc/cp-kafka:7.4.0"));
 
     @MockBean
     private JavaMailSender javaMailSender;
@@ -190,14 +190,15 @@ class FullStackIntegrationTest {
     }
 
     private Citizen createTestCitizen(String firstName, String lastName) {
+        long timestamp = System.currentTimeMillis();
         return Citizen.builder()
                 .firstName(firstName)
                 .lastName(lastName)
                 .dateOfBirth(LocalDate.of(1985, 6, 15))
                 .gender(Gender.MALE)
-                .citizenshipNumber("TEST" + System.currentTimeMillis())
+                .citizenshipNumber("TEST" + timestamp)
                 .userEmail(firstName.toLowerCase() + "." + lastName.toLowerCase() + "@testcontainers.com")
-                .phoneNo(1234567890L)
+                .phoneNo(timestamp % 9000000000L + 1000000000L) // Generate unique phone numbers
                 .district("Container District")
                 .municipality("Container City")
                 .status(CitizenStatus.PENDING)

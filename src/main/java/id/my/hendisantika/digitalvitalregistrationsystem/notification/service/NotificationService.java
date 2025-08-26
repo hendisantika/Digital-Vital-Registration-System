@@ -32,7 +32,7 @@ public class NotificationService {
     private final CertificateFileRepository certificateFileRepository;
     private final KafkaNotificationProducer kafkaNotificationProducer;
 
-    public void sendAndDispatch(Notification notification) {
+    public Notification sendAndDispatch(Notification notification) {
         log.info("Preparing to send notification: {}", notification);
 
         Long citizenId = notification.getCitizen() != null ? notification.getCitizen().getId() : null;
@@ -51,7 +51,7 @@ public class NotificationService {
                 .message(notification.getMessage())
                 .email(notification.getEmail())
                 .status(NotificationStatus.PENDING)
-                .createdAt(LocalDateTime.now())
+                .createdAt(notification.getCreatedAt() != null ? notification.getCreatedAt() : LocalDateTime.now())
                 .type(notification.getType())
                 .readStatus(Boolean.FALSE)
                 .certificateId(notification.getCertificateId())
@@ -64,7 +64,12 @@ public class NotificationService {
         }
         Notification savedNotification = notificationRepository.save(builder.build());
 
+        // Copy the ID back to the original notification for test purposes
+        notification.setId(savedNotification.getId());
+
         kafkaNotificationProducer.sendNotification(savedNotification);
         log.info("Notification sent to Kafka and saved to DB: {}", savedNotification);
+
+        return savedNotification;
     }
 }
