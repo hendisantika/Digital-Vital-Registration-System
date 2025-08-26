@@ -39,7 +39,7 @@
         <dependency>
             <groupId>net.sf.jasperreports</groupId>
             <artifactId>jasperreports</artifactId>
-            <version>6.20.0</version> <!-- You can use latest version -->
+            <version>7.0.3</version> <!-- You can use latest version -->
         </dependency>
         <!--Jwt  -->
         <!-- API dependency -->
