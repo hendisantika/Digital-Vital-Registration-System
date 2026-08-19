@@ -9,7 +9,7 @@ import id.my.hendisantika.digitalvitalregistrationsystem.config.TestConfig;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.test.context.DynamicPropertyRegistry;
@@ -38,7 +38,7 @@ class DatabaseIntegrationTest {
             .withUsername("testuser")
             .withPassword("testpass");
 
-    @MockBean
+    @MockitoBean
     private StringRedisTemplate stringRedisTemplate;
     @Autowired
     private CitizenRepository citizenRepository;

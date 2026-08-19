@@ -13,7 +13,7 @@ import id.my.hendisantika.digitalvitalregistrationsystem.notification.model.Noti
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.test.context.DynamicPropertyRegistry;
@@ -53,7 +53,7 @@ class FullStackIntegrationTest {
     @Container
     static KafkaContainer kafka = new KafkaContainer(DockerImageName.parse("confluentinc/cp-kafka:7.4.0"));
 
-    @MockBean
+    @MockitoBean
     private JavaMailSender javaMailSender;
     @Autowired
     private CitizenRepository citizenRepository;

@@ -3,7 +3,7 @@ package id.my.hendisantika.digitalvitalregistrationsystem;
 import id.my.hendisantika.digitalvitalregistrationsystem.config.TestConfig;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.test.context.ActiveProfiles;
@@ -13,7 +13,7 @@ import org.springframework.test.context.ActiveProfiles;
 @Import(TestConfig.class)
 class DigitalVitalRegistrationSystemApplicationTests {
 
-    @MockBean
+    @MockitoBean
     private StringRedisTemplate stringRedisTemplate;
 
     @Test
