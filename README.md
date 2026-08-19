@@ -32,8 +32,8 @@ notification services, and secure document management.
 
 ### Backend Technologies
 
-- **Java 21**: Latest LTS version of Java
-- **Spring Boot 3.5.4**: Modern Spring framework
+- **Java 25**: Latest LTS version of Java
+- **Spring Boot 4.1.0**: Modern Spring framework
 - **Spring Data JPA**: Database abstraction layer
 - **Spring Security**: Authentication and authorization
 - **Spring Cache**: Caching abstraction
@@ -58,7 +58,7 @@ notification services, and secure document management.
 
 Before running the application, ensure you have the following installed:
 
-- **Java 21** or higher
+- **Java 25** or higher
 - **Maven 3.9+**
 - **Docker & Docker Compose** (for running infrastructure services)
 - **Git** (for version control)
